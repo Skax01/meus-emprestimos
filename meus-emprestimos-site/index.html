@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f6b5c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Empréstimos">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<title>Meus Empréstimos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+:root{--bg:#e9efe4;--tx:#12261f;--mu:#5c7068;--ac:#0f7b5f;--gold:#8a6508;--ok:#16765a;--oks:rgba(31,162,127,.16);--red:#b8382a;--reds:rgba(184,56,42,.13);--soft:rgba(255,255,255,.45);--bd:rgba(20,60,45,.12);--ibd:rgba(20,70,55,.2);--glass:rgba(255,255,255,.5);--glass3:rgba(255,255,255,.62);--glassF:rgba(250,253,247,.97);--edge:rgba(255,255,255,.8);--inp:rgba(255,255,255,.6);--onb:rgba(255,255,255,.85);--trk:rgba(20,70,55,.14);--glsh:inset 0 1px 0 rgba(255,255,255,.9),inset 0 -1px 0 rgba(255,255,255,.25),0 12px 30px rgba(15,80,60,.14);--bgimg:radial-gradient(60% 45% at 88% 6%,rgba(240,205,120,.6),transparent 70%),radial-gradient(55% 50% at 6% 30%,rgba(95,190,150,.45),transparent 70%),radial-gradient(75% 55% at 28% 102%,rgba(60,160,130,.4),transparent 70%),radial-gradient(45% 40% at 100% 72%,rgba(160,200,220,.35),transparent 70%),linear-gradient(180deg,#f3f6ec 0%,#e6efdf 55%,#d6e6d3 100%);color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1a17;--tx:#e9f2ec;--mu:#9fb5ab;--ac:#4fd1a5;--gold:#f0c862;--ok:#7be0b4;--oks:rgba(79,209,165,.18);--red:#ff9b86;--reds:rgba(255,155,134,.16);--soft:rgba(255,255,255,.07);--bd:rgba(255,255,255,.1);--ibd:rgba(255,255,255,.14);--glass:rgba(22,40,34,.58);--glass3:rgba(16,30,26,.68);--glassF:rgba(20,36,31,.97);--edge:rgba(255,255,255,.14);--inp:rgba(255,255,255,.07);--onb:rgba(255,255,255,.16);--trk:rgba(255,255,255,.12);--glsh:inset 0 1px 0 rgba(255,255,255,.14),0 12px 32px rgba(0,0,0,.4);--bgimg:radial-gradient(60% 45% at 88% 4%,rgba(214,170,70,.28),transparent 70%),radial-gradient(55% 50% at 4% 34%,rgba(40,150,115,.4),transparent 70%),radial-gradient(78% 56% at 32% 102%,rgba(20,110,95,.5),transparent 70%),linear-gradient(180deg,#0d1a17 0%,#0f221d 60%,#12291f 100%);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0d1a17;--tx:#e9f2ec;--mu:#9fb5ab;--ac:#4fd1a5;--gold:#f0c862;--ok:#7be0b4;--oks:rgba(79,209,165,.18);--red:#ff9b86;--reds:rgba(255,155,134,.16);--soft:rgba(255,255,255,.07);--bd:rgba(255,255,255,.1);--ibd:rgba(255,255,255,.14);--glass:rgba(22,40,34,.58);--glass3:rgba(16,30,26,.68);--glassF:rgba(20,36,31,.97);--edge:rgba(255,255,255,.14);--inp:rgba(255,255,255,.07);--onb:rgba(255,255,255,.16);--trk:rgba(255,255,255,.12);--glsh:inset 0 1px 0 rgba(255,255,255,.14),0 12px 32px rgba(0,0,0,.4);--bgimg:radial-gradient(60% 45% at 88% 4%,rgba(214,170,70,.28),transparent 70%),radial-gradient(55% 50% at 4% 34%,rgba(40,150,115,.4),transparent 70%),radial-gradient(78% 56% at 32% 102%,rgba(20,110,95,.5),transparent 70%),linear-gradient(180deg,#0d1a17 0%,#0f221d 60%,#12291f 100%);color-scheme:dark}
+[hidden]{display:none!important}
+html{height:100%;background:var(--bg);scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0 auto;max-width:512px;background:transparent;color:var(--tx);font:15.5px/1.45 Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:16px 14px calc(104px + env(safe-area-inset-bottom,0px))}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:var(--bgimg)}
+body.wide{max-width:672px}
+.fd{font-family:"Cormorant Garamond",Georgia,serif}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:4px 4px 14px}
+.top h1{margin:0;font:600 32px/1.1 "Cormorant Garamond",Georgia,serif;letter-spacing:-.01em}
+.sub{font-size:13px;color:var(--mu);margin-top:3px}
+.tr{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.tg{position:relative;display:flex;align-items:center;justify-content:space-between;width:68px;height:36px;padding:0 9px;border-radius:999px;border:1px solid var(--edge);background:var(--glass3);box-shadow:var(--glsh);cursor:pointer;font-size:14px;-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
+.tg .tgi{position:relative;z-index:2;line-height:1;opacity:.5}
+.tg .thumb{position:absolute;top:3px;left:3px;width:28px;height:28px;border-radius:50%;z-index:1;background:linear-gradient(180deg,#fff,#ffe0ba);box-shadow:inset 0 1px 0 #fff,0 3px 8px rgba(150,80,30,.3);transition:transform .4s cubic-bezier(.3,1.4,.5,1),background .3s}
+.tg.dk .thumb{transform:translateX(32px);background:linear-gradient(180deg,#5d483b,#2f221b);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 3px 8px rgba(0,0,0,.45)}
+.tg:not(.dk) .s,.tg.dk .m{opacity:1}
+.av{width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.6);color:#fff;font:700 21px/1 "Cormorant Garamond",Georgia,serif;text-shadow:0 1px 2px rgba(80,35,10,.5);cursor:pointer;box-shadow:0 4px 10px rgba(10,80,60,.25)}
+.glass,.card,.stat,.greet,.sbox div,.mb{background:var(--glass);border:1px solid var(--edge);box-shadow:var(--glsh);-webkit-backdrop-filter:blur(20px) saturate(165%);backdrop-filter:blur(20px) saturate(165%)}
+.greet{border-radius:28px;padding:22px 22px 18px;margin-bottom:14px;animation:up .3s ease-out both}
+.greet small{display:block;color:var(--mu);font-size:15px;letter-spacing:.02em}
+.greet h2{margin:2px 0 8px;font:600 clamp(30px,9vw,42px)/1.05 "Cormorant Garamond",Georgia,serif;letter-spacing:-.01em;overflow-wrap:anywhere}
+.sv{display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:4px 10px;border-radius:12px}
+.sv.ok{background:var(--oks);color:var(--ok)}.sv.sg{background:var(--soft);color:var(--mu)}
+.alert{display:flex;gap:10px;align-items:flex-start;background:var(--reds);color:var(--red);border-radius:12px;padding:10px 12px;font-size:12px}
+.alert button{background:none;border:0;color:inherit;font-size:18px;cursor:pointer}
+nav{position:fixed;left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:20}
+nav div{max-width:512px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:2px;padding:6px;border-radius:28px;background:var(--glass3);border:1px solid var(--edge);box-shadow:var(--glsh);-webkit-backdrop-filter:blur(28px) saturate(180%);backdrop-filter:blur(28px) saturate(180%)}
+nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;height:56px;border:0;background:none;border-radius:22px;font:600 11px Inter,system-ui,sans-serif;color:var(--mu);cursor:pointer}
+nav button i{font-style:normal;font-size:21px;line-height:1}
+nav button.on{background:linear-gradient(180deg,var(--onb),rgba(255,255,255,.1));color:var(--ac);box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 4px 12px rgba(10,100,75,.2)}
+.card{border-radius:20px;padding:16px;margin-bottom:12px;animation:up .25s ease-out both}
+@keyframes up{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.fi{animation:up .25s ease-out both}
+.ct{font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--mu);margin-bottom:8px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.full{grid-column:1/-1}
+label.l,.lb{display:block;font-size:12px;font-weight:500;color:var(--mu)}
+input,select{display:block;margin-top:4px;width:100%;height:44px;border-radius:14px;border:1px solid var(--ibd);background:var(--inp);color:var(--tx);padding:0 12px;font:inherit;font-size:16px;min-width:0}
+input:focus,select:focus{outline:none;border-color:var(--ac);box-shadow:0 0 0 3px rgba(31,162,127,.25)}
+input:disabled{opacity:.4;cursor:not-allowed}
+.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#138a69,#0a5a4c);color:#fff;border-radius:22px;padding:20px;box-shadow:0 12px 28px rgba(10,90,70,.32)}
+.hero:after{content:"";position:absolute;right:-34px;top:-34px;width:150px;height:150px;border-radius:50%;background:rgba(236,196,92,.3)}
+.hero small{opacity:.9}.hero b{display:block;font:600 40px/1.1 "Cormorant Garamond",Georgia,serif}.hero span{font-size:13px;opacity:.95}
+.btn{display:inline-flex;align-items:center;justify-content:center;border-radius:14px;min-height:40px;padding:0 14px;font:600 14px Inter,sans-serif;background:linear-gradient(180deg,#25a882,#0d6b52);color:#fff;border:1px solid rgba(255,255,255,.38);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 6px 14px rgba(10,100,75,.28);text-shadow:0 1px 1px rgba(90,40,10,.3);cursor:pointer;text-decoration:none;gap:6px}
+.btn.big{width:100%;min-height:56px;font-size:16px;border-radius:18px}.btn:active{transform:scale(.97)}
+.btn.g,.btn.d,.btn.w{background:var(--soft);color:var(--ac);border:1px solid var(--edge);box-shadow:none;text-shadow:none}
+.btn.d{background:var(--reds);color:var(--red)}.btn.w{background:var(--oks);color:var(--ok)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.sp{justify-content:space-between;align-items:flex-start}
+.tag{font-size:11px;font-weight:700;padding:4px 10px;border-radius:12px;background:var(--oks);color:var(--ok);white-space:nowrap}.tag.lt{background:var(--reds);color:var(--red)}.tag.mu{background:var(--soft);color:var(--mu)}.tag.pr{background:rgba(214,170,60,.24);color:var(--gold)}
+.note{font-size:12px;color:var(--mu)}b.n,.tn{font-variant-numeric:tabular-nums}
+.st3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.stat{border-radius:20px;padding:16px 6px 14px;text-align:center;animation:up .25s ease-out both}
+.stat b{display:block;font:600 34px/1.1 "Cormorant Garamond",Georgia,serif;color:var(--ac)}.stat b.sm{font-size:23px;padding-top:6px;color:var(--gold)}.stat span{font-size:12px;color:var(--mu)}
+.rc{display:flex;align-items:center;gap:16px}
+.ring{--p:0;flex:none;position:relative;width:92px;height:92px;border-radius:50%;background:conic-gradient(var(--ac) calc(var(--p)*1%),var(--trk) 0);display:flex;align-items:center;justify-content:center;font:600 24px "Cormorant Garamond",Georgia,serif}
+.ring:before{content:"";position:absolute;inset:9px;border-radius:50%;background:var(--glassF)}.ring span{position:relative}
+.k3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;margin-top:12px}.k3 div{background:var(--soft);border-radius:14px;padding:8px 4px}.k3 p{margin:0;font-size:10px;color:var(--mu)}.k3 b{font-size:14px}
+.bar{height:8px;border-radius:6px;background:var(--trk);overflow:hidden;margin-top:4px}.bar i{display:block;height:100%;background:linear-gradient(90deg,#e6c25a,#1fa27f);border-radius:6px;transition:width .5s}
+ul.l{list-style:none;margin:12px 0 0;padding:0}ul.l li{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0;border-top:1px solid var(--bd);font-size:14px}ul.l li:first-child{border-top:0}
+.pg{height:36px;border-radius:12px;border:1px solid rgba(255,255,255,.38);background:linear-gradient(180deg,#25a882,#0d6b52);color:#fff;font:600 12px Inter,sans-serif;padding:0 16px;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 4px 10px rgba(10,100,75,.25)}.pg:active{transform:scale(.95)}
+.ud{height:36px;border:0;background:none;color:var(--ok);font:600 12px Inter,sans-serif;cursor:pointer;padding:0 6px}
+.late{color:var(--red)}.mu{color:var(--mu)}
+.empty{text-align:center;padding:48px 24px}.empty p{margin:4px 0}.empty .fd{font-size:24px;font-weight:600}
+.cal7{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}.cal7 .h{font-size:11px;color:var(--mu);padding:4px 0}
+.cal7 button{position:relative;height:44px;border:0;border-radius:14px;background:none;color:var(--tx);font:inherit;font-size:14px;cursor:pointer}
+.cal7 button.t{background:rgba(31,162,127,.18);color:var(--ac)}.cal7 button.a{background:linear-gradient(180deg,#25a882,#0d6b52);color:#fff}
+.cal7 button i{position:absolute;left:50%;bottom:6px;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:var(--ok)}.cal7 button i.lt{background:var(--red)}
+.ch{display:flex;align-items:flex-end;gap:4px;height:140px}.ch div{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;font-size:10px;color:var(--mu)}.ch i{display:block;width:100%;background:linear-gradient(180deg,#e6c25a,#13866a);border-radius:6px 6px 0 0;min-height:2px;margin-bottom:3px}
+.sbox{display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:8px}.sbox div{border-radius:18px;text-align:center;padding:14px 6px}.sbox b{display:block;font:600 22px "Cormorant Garamond",Georgia,serif;color:var(--ac);word-break:break-word}.sbox div:nth-child(2) b{color:var(--gold)}.sbox span{font-size:10px;color:var(--mu)}
+.sec{border-bottom:1px solid var(--bd);padding:16px 0}.mg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}.mg button{text-align:left;border:0;background:none;border-radius:12px;padding:8px;font:inherit;cursor:pointer;color:var(--tx);min-height:52px}.mg button.on{background:rgba(31,162,127,.18)}.mg small{display:block;font-size:11px;color:var(--mu)}.mg span{font-size:12px}
+.drop{border:2px dashed var(--ibd);border-radius:18px;padding:22px 12px;text-align:center;cursor:pointer;background:var(--soft);color:var(--ac);font-size:15px}.drop small{display:block;color:var(--mu);font-size:12px;margin-top:4px}.drop.on{border-color:var(--ac);background:var(--oks)}
+.hi{padding:12px 0;border-bottom:1px solid var(--bd)}
+.sw{display:flex;gap:10px}.sw button{width:34px;height:34px;border-radius:50%;border:2px solid transparent;cursor:pointer}.sw button.on{border-color:var(--tx);box-shadow:0 0 0 2px var(--glassF)}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:var(--soft);padding:4px;border-radius:14px}.seg button{border:0;background:none;border-radius:11px;height:38px;font:600 13px Inter,sans-serif;color:var(--mu);cursor:pointer}.seg button.on{background:var(--glassF);color:var(--ac);box-shadow:var(--glsh)}
+.modal{position:fixed;inset:0;background:rgba(10,30,22,.4);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px}
+.mb{background:var(--glassF);border-radius:24px;padding:20px;max-width:400px;width:100%}.mb h4{margin:0 0 8px;font:600 24px "Cormorant Garamond",Georgia,serif}.mb p{margin:0 0 16px;color:var(--mu);white-space:pre-line}
+.toast{position:fixed;left:50%;transform:translateX(-50%);background:rgba(36,26,20,.85);color:#f7e9d8;border:1px solid rgba(255,255,255,.18);padding:10px 16px;border-radius:22px;font-size:14px;z-index:60;bottom:calc(96px + env(safe-area-inset-bottom,0px));max-width:90%;text-align:center;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.card,.stat,.greet,.sbox div,nav div{background:var(--glassF)}}
+</style>
+</head>
+<body>
+<header class="top"><div><h1>Meus Empréstimos</h1><div class="sub" id="dt"></div></div><div class="tr"><button class="tg" id="tg" data-a="theme" aria-label="Alternar tema claro e escuro"><span class="tgi s">☀️</span><span class="tgi m">🌙</span><span class="thumb"></span></button><button class="av" id="av" data-a="profile" aria-label="Perfil e personalização"></button></div></header>
+<section class="greet"><small id="g1"></small><h2 id="g2"></h2><div id="sv"></div></section>
+<main id="v"></main>
+<nav><div id="nav"></div></nav>
+<input type="file" id="fi" accept=".json,application/json" hidden>
+<script>
+var $=function(i){return document.getElementById(i)},p2=function(n){return String(n).padStart(2,"0")},r2=function(v){return Math.round(v*100)/100};
+var brl=function(n){return(n||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"})};
+var fd=function(s){return s?s.slice(0,10).split("-").reverse().join("/"):""};
+var uid=function(){return window.crypto&&crypto.randomUUID?crypto.randomUUID():Math.random().toString(36).slice(2)+Date.now().toString(36)};
+var esc=function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})};
+var MN=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+function today(){var t=new Date();return t.getFullYear()+"-"+p2(t.getMonth()+1)+"-"+p2(t.getDate())}
+function addM(iso,m){var a=iso.split("-").map(Number),t=a[1]-1+m,ny=a[0]+Math.floor(t/12),nm=((t%12)+12)%12,last=new Date(Date.UTC(ny,nm+1,0)).getUTCDate();return ny+"-"+p2(nm+1)+"-"+p2(Math.min(a[2],last))}
+function num(s){s=String(s||"").trim();return(s.indexOf(",")>-1?parseFloat(s.replace(/\./g,"").replace(",",".")):parseFloat(s))||0}
+function wa(ph,tx){var d=(ph||"").replace(/\D/g,"");if(d&&d.length<=11)d="55"+d;return"https://wa.me/"+d+"?text="+encodeURIComponent(tx)}
+
+/* ===== regras (iguais ao sistema da Lovable) ===== */
+function calc(o){var n=Math.max(1,Math.min(12,Math.floor(o.count||1))),rt=(o.rate||0)/100*(o.type==="monthly"?n:1),sc=n>=2?(o.sur||0)/100:0,
+ interest=r2(o.principal*rt),surcharge=r2(o.principal*sc),total=r2(o.principal+interest+surcharge),per=Math.floor(total/n*100)/100,am=[];
+ for(var i=0;i<n;i++)am.push(i===n-1?r2(total-per*(n-1)):per);return{n:n,interest:interest,surcharge:surcharge,total:total,per:per,amounts:am}}
+function build(am,first){return am.map(function(a,i){return{n:i+1,due:addM(first,i),amount:a,paidAt:null}})}
+function sumA(a){return r2(a.reduce(function(s,x){return s+x.amount},0))}
+function tot(l){var c=calc({principal:l.principal,rate:l.interest_rate,type:l.interest_type,sur:l.surcharge_rate,count:l.installments_count}),t=sumA(l.installments),p=sumA(l.installments.filter(function(i){return i.paidAt}));
+ return{interest:c.interest,surcharge:c.surcharge,total:t,paid:p,remaining:r2(t-p),next:l.installments.find(function(i){return!i.paidAt})||null}}
+function settled(l){return l.installments.every(function(i){return i.paidAt})}
+function overdue(l){var t=today();return l.installments.some(function(i){return!i.paidAt&&i.due<t})}
+function mapI(l,f){return Object.assign({},l,{installments:l.installments.map(f)})}
+function cn(id){return S.clients.find(function(c){return c.id===id})}
+function mergeById(a,b){var m=new Map();a.concat(b).forEach(function(x){m.set(x.id,x)});return Array.from(m.values())}
+function delay(p,d){return Math.max(0,Math.round((Date.parse(p.slice(0,10)+"T00:00:00Z")-Date.parse(d.slice(0,10)+"T00:00:00Z"))/864e5))}
+function receipts(){var out=[];S.loans.forEach(function(l){
+ l.installments.forEach(function(i,k){if(i.paidAt)out.push({id:l.id+":i:"+k,loanId:l.id,clientId:l.client_id,kind:"i",index:k,label:l.installments_count===1?"Pagamento único":"Parcela "+i.n+"/"+l.installments_count,amount:i.amount,paidAt:i.paidAt.slice(0,10),due:i.due,late:delay(i.paidAt,i.due)})});
+ l.renewals.forEach(function(r,k){out.push({id:l.id+":r:"+k,loanId:l.id,clientId:l.client_id,kind:"r",index:k,label:"Juros da renovação "+(k+1),amount:r.amount,paidAt:r.date.slice(0,10),due:r.fromDue,late:delay(r.date,r.fromDue)})})});
+ return out.sort(function(a,b){return b.paidAt.localeCompare(a.paidAt)||a.id.localeCompare(b.id)})}
+
+/* ===== salvamento local: IndexedDB + localStorage + 5 cópias ===== */
+var LK="meus-emprestimos:local:v1",SK=LK+":snapshots",DBN="meus-emprestimos-local";
+var D={sup:!!window.showDirectoryPicker,dir:null,perm:"none",ok:false,at:null,err:"",busy:false,timer:null},dirty=false,chg=0;
+var GCID="",GK="meus-emprestimos:google";
+function gget(k){try{return localStorage.getItem(GK+":"+k)||""}catch(e){return""}}
+function gset(k,v){try{if(v)localStorage.setItem(GK+":"+k,v===true?"1":v);else localStorage.removeItem(GK+":"+k)}catch(e){}}
+var G={cid:GCID||gget("cid"),tok:null,exp:0,folder:null,linked:gget("linked")==="1",pend:gget("pend")==="1",ok:false,at:null,err:"",busy:false,timer:null},TC=null;
+var S={clients:[],loans:[],status:"idle",err:null,last:null,user:"",avatar:0,loaded:false},rev=0,snaps=[],writes=Promise.resolve(),rtimer=null;
+function odb(){return new Promise(function(ok,no){var r=indexedDB.open(DBN,1);r.onupgradeneeded=function(){r.result.createObjectStore("data")};r.onsuccess=function(){ok(r.result)};r.onerror=function(){no(r.error)};r.onblocked=function(){no(new Error("blocked"))}})}
+function idb(mode,fn){return odb().then(function(db){return new Promise(function(ok,no){var tx=db.transaction("data",mode),q=fn(tx.objectStore("data"));tx.oncomplete=function(){db.close();ok(q&&q.result)};tx.onerror=tx.onabort=function(){db.close();no(tx.error)}})})}
+function snap(){return{clients:S.clients,loans:S.loans,revision:rev,savedAt:new Date().toISOString(),lastExportAt:S.last,userName:S.user,avatar:S.avatar}}
+function validSnap(x){return x&&Array.isArray(x.clients)&&Array.isArray(x.loans)&&typeof x.revision==="number"}
+function fail(){S.status="error";S.err="Não foi possível gravar todas as cópias neste aparelho. Não feche esta página; libere espaço ou exporte um backup. Tentaremos novamente.";badge();clearTimeout(rtimer);rtimer=setTimeout(retry,5000)}
+function persist(sn){
+ var mirror=true;
+ try{localStorage.setItem(LK,JSON.stringify(sn));localStorage.setItem(SK,JSON.stringify(snaps))}catch(e){mirror=false;fail()}
+ var arc={current:sn,snapshots:snaps.slice()};
+ writes=writes.then(function(){return idb("readwrite",function(st){return st.put(arc,"archive")}).then(function(){
+  if(sn.revision!==rev)return;if(!mirror){fail();return}
+  clearTimeout(rtimer);S.status="saved";S.err=null;badge()}).catch(function(){if(sn.revision===rev)fail()})})}
+function change(p){dirty=true;chg++;Object.assign(S,p);S.status="saving";S.err=null;rev=Math.max(Date.now(),rev+1);var sn=snap();snaps=snaps.concat([sn]).slice(-5);badge();persist(sn);render();driveSoon();gSoon()}
+function retry(){if(!S.loaded)return;S.status="saving";badge();persist(snap())}
+function saveLoan(l,c){change({loans:mergeById(S.loans,[l]),clients:c?mergeById(S.clients,[c]):S.clients})}
+function badge(){var e=$("sv");if(!e)return;
+ if(S.status==="error")e.innerHTML='<div class="alert" role="alert"><span style="flex:1">'+esc(S.err)+'</span><button data-a="retry" aria-label="Tentar de novo">↻</button></div>';
+ else if(S.status==="saving")e.innerHTML='<span class="sv sg">Salvando…</span>';
+ else if(S.status==="saved")e.innerHTML='<span class="sv ok">✓ Salvo neste aparelho</span>';else e.innerHTML="";if(G.linked&&G.pend&&S.status!=="error")e.innerHTML+=' <button class="sv sg" style="border:0;cursor:pointer;color:var(--red)" data-a="gsync">☁️ Backup pendente · tocar</button>'}
+async function load(){
+ var c=[],bad=false;
+ try{var raw=localStorage.getItem(LK);if(raw){var x=JSON.parse(raw);if(validSnap(x))c.push(x);else bad=true}
+  var h=JSON.parse(localStorage.getItem(SK)||"[]");if(Array.isArray(h))h.forEach(function(s){if(validSnap(s))c.push(s)})}catch(e){bad=true}
+ try{var a=await idb("readonly",function(st){return st.get("archive")});if(a){[a.current].concat(a.snapshots||[]).forEach(function(s){if(validSnap(s))c.push(s)})}}catch(e){}
+ var u=Array.from(new Map(c.map(function(s){return[s.revision,s]})).values()).sort(function(a,b){return a.revision-b.revision}),nw=u[u.length-1];
+ snaps=u.slice(-5);
+ if(nw){rev=nw.revision;S.clients=nw.clients;S.loans=nw.loans;S.last=nw.lastExportAt||null;S.user=nw.userName||"";S.avatar=nw.avatar||0}
+ S.loaded=true;
+ if(bad&&!nw){S.status="error";S.err="Não foi possível recuperar os dados deste aparelho. Restaure um backup em Clientes."}
+ else{S.status="saving";persist(nw||snap())}
+ badge();render();
+ try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}}
+
+/* ===== interface ===== */
+var tab="novo",cm=today().slice(0,7),cs=today(),Q="",PY=today().slice(0,4),PM="all";
+var TABS=[["novo","📝","Novo"],["ativos","💰","Ativos"],["painel","📊","Painel"],["clientes","🤝","Clientes"],["cal","📅","Calendário"]];
+function cleanName(s){s=String(s||"").trim().replace(/\s+/g," ");var w=s.split(" ");return w.length>=2&&w.every(function(x){return x.length>=2&&/\p{L}/u.test(x)})?s:""}
+function vGate(){return'<div class="card" style="text-align:center;padding:24px 18px"><div class="fd" style="font-size:22px;margin-bottom:6px">Bem-vindo(a)</div><p class="note" style="font-size:14px;margin:0 0 16px">Para começar, informe seu nome completo. Ele aparece na saudação e fica salvo neste aparelho.</p><label class="l" style="text-align:left">Nome completo<input id="un" autocomplete="name" placeholder="Ex.: Maria da Silva Souza"></label><button class="btn big" style="margin-top:14px" data-a="setname">Continuar</button></div>'}
+function askName(cur,fn){var o=document.createElement("div");o.className="modal";o.innerHTML='<div class="mb"><h4>Seu nome completo</h4><label class="l" style="margin-bottom:14px">Nome e sobrenome<input id="un2" autocomplete="name" value="'+esc(cur)+'"></label><div class="row" style="justify-content:flex-end"><button class="btn g" data-m="n">Cancelar</button><button class="btn" data-m="y">Salvar</button></div></div>';o.addEventListener("click",function(e){var m=e.target.getAttribute("data-m");if(m==="n"||e.target===o)o.remove();else if(m==="y"){var v=cleanName($("un2").value);if(!v){toast("Informe seu nome completo (nome e sobrenome)");return}o.remove();fn(v)}});document.body.appendChild(o)}
+var AVC=["linear-gradient(135deg,#25a882,#0d6b52)","linear-gradient(135deg,#e6c25a,#b98a2a)","linear-gradient(135deg,#5aa9c9,#2f6f8f)","linear-gradient(135deg,#b78bc9,#7c4f96)","linear-gradient(135deg,#e5806a,#b8382a)"],TK="meus-emprestimos:theme";
+function setDt(){var d=new Date(),w=d.toLocaleDateString("pt-BR",{weekday:"long",day:"numeric",month:"long"});$("dt").textContent=w.charAt(0).toUpperCase()+w.slice(1)+" · "+p2(d.getHours())+":"+p2(d.getMinutes())}
+function getTheme(){try{return localStorage.getItem(TK)||"auto"}catch(e){return"auto"}}
+function isDark(m){return m==="dark"||(m!=="light"&&window.matchMedia&&matchMedia("(prefers-color-scheme:dark)").matches)}
+function applyTheme(m){var r=document.documentElement;if(m==="light"||m==="dark")r.setAttribute("data-theme",m);else r.removeAttribute("data-theme");$("tg").classList.toggle("dk",isDark(m))}
+function setTheme(m){try{localStorage.setItem(TK,m)}catch(e){}applyTheme(m)}
+function openProfile(){
+ var sel=S.avatar||0,o=document.createElement("div");o.className="modal";
+ function paint(){var m=getTheme();o.querySelectorAll("[data-c]").forEach(function(b){b.classList.toggle("on",+b.dataset.c===sel)});o.querySelectorAll("[data-th]").forEach(function(b){b.classList.toggle("on",b.dataset.th===m)})}
+ o.innerHTML='<div class="mb"><h4>Perfil</h4><label class="l">Nome completo<input id="un2" autocomplete="name" value="'+esc(S.user)+'"></label><div class="lb" style="margin:14px 0 6px">Cor do avatar</div><div class="sw">'+AVC.map(function(c,i){return'<button data-c="'+i+'" style="background:'+c+'" aria-label="Cor '+(i+1)+'"></button>'}).join("")+'</div><div class="lb" style="margin:14px 0 6px">Tema</div><div class="seg">'+[["auto","Automático"],["light","Claro"],["dark","Escuro"]].map(function(t){return'<button data-th="'+t[0]+'">'+t[1]+"</button>"}).join("")+'</div><div class="row" style="justify-content:flex-end;margin-top:18px"><button class="btn g" data-m="n">Cancelar</button><button class="btn" data-m="y">Salvar</button></div></div>';
+ o.addEventListener("click",function(e){var b=e.target.closest("button"),m=e.target.getAttribute("data-m");
+  if(b&&b.dataset.c!==undefined){sel=+b.dataset.c;paint();return}
+  if(b&&b.dataset.th){setTheme(b.dataset.th);paint();return}
+  if(e.target===o||m==="n"){o.remove();return}
+  if(m==="y"){var v=cleanName($("un2").value);if(!v){toast("Informe seu nome completo (nome e sobrenome)");return}o.remove();change({user:v,avatar:sel});toast("Perfil atualizado")}});
+ document.body.appendChild(o);paint()}
+function render(){
+ var h=new Date().getHours(),g=h<12?"Bom dia":h<18?"Boa tarde":"Boa noite";
+ $("g1").textContent=g;$("g2").textContent=S.user||"Bem-vindo(a)";setDt();
+ $("av").textContent=S.user?S.user.trim().charAt(0).toUpperCase():"•";$("av").style.background=AVC[S.avatar||0]||AVC[0];
+ if(!S.loaded){$("nav").innerHTML="";$("v").innerHTML='<p class="note" style="text-align:center;padding:48px 0">Carregando…</p>';badge();return}
+ if(!S.user){$("nav").innerHTML="";$("v").innerHTML=vGate();badge();return}
+ document.body.className=tab==="painel"?"wide":"";
+ $("nav").innerHTML=TABS.map(function(t){return'<button class="'+(t[0]===tab?"on":"")+'" data-t="'+t[0]+'" aria-pressed="'+(t[0]===tab)+'"><i>'+t[1]+"</i>"+t[2]+"</button>"}).join("");
+ $("v").innerHTML='<div class="fi">'+({novo:vNovo,ativos:vAtivos,painel:vPainel,clientes:vClientes,cal:vCal})[tab]()+"</div>";if(tab==="novo")prev();badge()}
+function toast(m){var d=document.createElement("div");d.className="toast";d.textContent=m;document.body.appendChild(d);setTimeout(function(){d.remove()},2600)}
+function ask(title,msg,yes,fn,danger){var o=document.createElement("div");o.className="modal";o.innerHTML='<div class="mb"><h4>'+esc(title)+"</h4><p>"+esc(msg)+'</p><div class="row" style="justify-content:flex-end"><button class="btn g" data-m="n">Cancelar</button><button class="btn'+(danger?" d":"")+'" data-m="y">'+esc(yes)+"</button></div></div>";o.addEventListener("click",function(e){var m=e.target.getAttribute("data-m");if(m){o.remove();if(m==="y")fn()}});document.body.appendChild(o)}
+function askDate(cur,fn){var o=document.createElement("div");o.className="modal";o.innerHTML='<div class="mb"><h4>Data do pagamento</h4><label class="l" style="margin-bottom:14px">Pago em<input id="pd" type="date" max="'+today()+'" value="'+cur+'"></label><button class="btn big" data-m="y" style="min-height:44px">Salvar data</button></div>';o.addEventListener("click",function(e){var m=e.target.getAttribute("data-m");if(e.target===o)o.remove();else if(m==="y"){var v=$("pd").value;if(v&&v<=today()){o.remove();fn(v)}}});document.body.appendChild(o)}
+function empty(t,x){return'<div class="empty"><p class="fd">'+t+'</p><p class="note">'+x+"</p></div>"}
+
+function vNovo(){var t=today(),o="";for(var n=1;n<=12;n++)o+='<option value="'+n+'">'+(n===1?"1x (único)":n+"x")+"</option>";
+ return'<div id="nf"><div class="card"><div class="grid">'+
+ '<label class="l full">Nome do cliente<input id="fn" list="cl" autocomplete="off" placeholder="Ex.: Maria Souza"><datalist id="cl">'+S.clients.map(function(c){return'<option value="'+esc(c.name)+'">'}).join("")+"</datalist></label>"+
+ '<label class="l">WhatsApp<input id="fp" type="tel" inputmode="tel" placeholder="(11) 99999-9999"></label>'+
+ '<label class="l">Valor (R$)<input id="fv" inputmode="decimal" placeholder="1.000,00"></label>'+
+ '<label class="l">Parcelas<select id="fx">'+o+"</select></label>"+
+ '<label class="l">Tipo de juros<select id="fm"><option value="fixed">Fixo</option><option value="monthly">Ao mês</option></select></label>'+
+ '<label class="l">Juros (%)<input id="fr" inputmode="decimal" value="15"></label>'+
+ '<label class="l">Acréscimo (%)<input id="fa" inputmode="decimal" disabled></label>'+
+ '<label class="l">Emprestado em<input id="fz" type="date" value="'+t+'"></label>'+
+ '<label class="l">1º vencimento<input id="f1" type="date" value="'+addM(t,1)+'"></label></div></div>'+
+ '<div class="hero" style="margin-bottom:16px"><small style="text-transform:uppercase;letter-spacing:.08em;font-weight:500">Total a receber</small><b id="pt"></b><span id="ps"></span></div>'+
+ '<button class="btn big" data-a="add">Registrar empréstimo</button></div>'}
+function rf(){return{principal:num($("fv").value),rate:num($("fr").value),type:$("fm").value,sur:num($("fa").value),count:+$("fx").value||1}}
+function prev(){
+ var a=$("fa"),n=+$("fx").value||1;
+ if(n<2){a.disabled=true;a.value="";a.placeholder="Só a partir de 2x"}else if(a.disabled){a.disabled=false;a.value="0";a.placeholder="0"}
+ var c=calc(rf()),last=c.amounts[c.n-1];
+ $("pt").textContent=brl(c.total);
+ $("ps").textContent=c.n+"x de "+brl(c.per)+(c.n>1&&last!==c.per?" (última "+brl(last)+")":"")+" · juros "+brl(c.interest)+(c.n>=2?" · acréscimo "+brl(c.surcharge):"")}
+
+function vAtivos(){
+ var t=today(),A=S.loans.filter(function(l){return!settled(l)}).sort(function(a,b){return((tot(a).next||{due:""}).due).localeCompare((tot(b).next||{due:""}).due)}),rec=0,late=0,k,i,mo=[],ab=["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"],ym=t.slice(0,7),got=0,pend=0,due=[],cap=0,prof=0;
+ A.forEach(function(l){var T=tot(l);rec+=T.remaining;cap+=l.principal;prof+=T.total-l.principal;if(overdue(l))late++});
+ for(i=0;i<6;i++)mo.push({k:addM(t.slice(0,7)+"-01",i).slice(0,7),v:0});
+ A.forEach(function(l){l.installments.forEach(function(x){if(x.paidAt)return;var m=x.due.slice(0,7);if(m<=ym)pend+=x.amount;if(x.due===t)due.push({l:l,x:x});if(m<mo[0].k)m=mo[0].k;for(k=0;k<6;k++)if(mo[k].k===m)mo[k].v+=x.amount})});
+ S.loans.forEach(function(l){l.installments.forEach(function(x){if(x.paidAt&&x.paidAt.slice(0,7)===ym)got+=x.amount});l.renewals.forEach(function(r){if(r.date.slice(0,7)===ym)got+=r.amount})});
+ var goal=got+pend,pc=goal?Math.round(got/goal*100):0,mx=Math.max.apply(null,mo.map(function(x){return x.v}).concat([1]));
+ var h='<div class="st3"><div class="stat"><b>'+A.length+"</b><span>ativos</span></div><div class=\"stat\"><b class=\"sm\">"+brl(rec)+'</b><span>a receber</span></div><div class="stat"><b>'+late+"</b><span>atrasados</span></div></div>"+
+ '<div class="card rc"><div class="ring" style="--p:'+pc+'"><span>'+pc+'%</span></div><div><div class="ct" style="margin-bottom:2px">Recebimentos do mês</div><div style="font-size:17px;font-weight:600">'+brl(got)+' <span class="mu" style="font-weight:400">de '+brl(goal)+'</span></div><div class="note">'+(pend>0?"Falta receber "+brl(pend)+" até o fim do mês.":"Tudo do mês já foi recebido.")+"</div></div></div>"+
+ '<div class="card"><div class="ct">Resumo financeiro</div><div class="k3" style="margin-top:0"><div><p>Capital na rua</p><b class="n">'+brl(cap)+'</b></div><div><p>Lucro previsto</p><b class="n" style="color:var(--gold)">'+brl(prof)+'</b></div><div><p>Retorno</p><b class="n">'+(cap?Math.round(prof/cap*100):0)+'%</b></div></div></div>'+
+ '<div class="card"><div class="ct">Vencimentos de hoje</div>'+(due.length?due.map(function(o){var c=cn(o.l.client_id);return'<div class="row sp" style="align-items:center;padding:6px 0"><div style="min-width:0"><b>'+esc(c?c.name:"")+'</b><div class="note">'+(o.l.installments_count===1?"Pagamento único":"Parcela "+o.x.n+"/"+o.l.installments_count)+" · "+brl(o.x.amount)+'</div></div><button class="pg" data-a="pay" data-l="'+o.l.id+'" data-i="'+o.x.n+'">Pagar</button></div>'}).join(""):'<div class="note" style="font-size:14px">Nada vence hoje.</div>')+"</div>"+
+ (A.length?'<div class="card"><div class="ct">Recebimentos previstos</div><div class="ch">'+mo.map(function(x){return'<div title="'+brl(x.v)+'"><i style="height:'+Math.round(x.v/mx*100)+'px"></i>'+ab[+x.k.slice(5)-1]+"</div>"}).join("")+"</div></div>":"");
+ return h+(A.length?A.map(loanCard).join(""):empty("Nenhum empréstimo ativo","Registre um empréstimo na aba Novo e ele aparece aqui."))}
+function loanCard(l){
+ var T=tot(l),late=overdue(l),done=settled(l),pct=T.total?Math.round(T.paid/T.total*100):0,t=today(),c=cn(l.client_id)||{name:"Cliente",phone:""},k='data-l="'+l.id+'"',
+ msg=T.next?"Olá "+c.name+", tudo bem? Passando para lembrar da parcela "+T.next.n+"/"+l.installments_count+" de "+brl(T.next.amount)+" com vencimento em "+fd(T.next.due)+". Valor em aberto: "+brl(T.remaining)+". Obrigado!":"Olá "+c.name+", tudo bem?";
+ return'<div class="card"><div class="row sp"><div style="min-width:0"><b>'+esc(c.name)+'</b><div class="note">Emprestado '+brl(l.principal)+" em "+fd(l.loan_date)+'</div></div><span class="tag '+(done?"pr":late?"lt":"")+'">'+(done?"Quitado":late?"Atrasado":"Em dia")+"</span></div>"+
+ '<div class="k3"><div><p>Total</p><b class="n">'+brl(T.total)+'</b></div><div><p>Juros</p><b class="n">'+brl(T.interest)+'</b></div><div><p>Acréscimo</p><b class="n">'+brl(T.surcharge)+"</b></div></div>"+
+ '<div style="margin-top:12px"><div class="row sp note"><span>Pago '+brl(T.paid)+"</span><span>"+pct+'%</span></div><div class="bar"><i style="width:'+pct+'%"></i></div></div><ul class="l">'+
+ l.installments.map(function(i){return"<li><div><b>"+(l.installments_count===1?"Único":i.n+"/"+l.installments_count)+'</b> <span class="'+(!i.paidAt&&i.due<t?"late":"mu")+'" style="margin-left:6px">'+fd(i.due)+'</span> <span class="n" style="margin-left:6px">'+brl(i.amount)+"</span></div>"+
+  (i.paidAt?'<button class="ud" data-a="unpay" '+k+' data-i="'+i.n+'">✓ Pago '+fd(i.paidAt)+" ↩</button>":'<button class="pg" data-a="pay" '+k+' data-i="'+i.n+'">Pagar</button>')+"</li>"}).join("")+"</ul>"+
+ (l.renewals.length?'<p class="note" style="margin:4px 0 0">Renovações: '+l.renewals.map(function(r){return fd(r.date)+" ("+brl(r.amount)+")"}).join(" · ")+"</p>":"")+
+ '<div class="row" style="margin-top:12px">'+(!done&&l.installments_count===1?'<button class="btn g" data-a="ren" '+k+">↻ Renovar</button>":"")+(!done?'<button class="btn g" data-a="set" '+k+">Quitar "+brl(T.remaining)+"</button>":"")+
+ (c.phone?'<a class="btn w" target="_blank" rel="noopener" href="'+wa(c.phone,msg)+'">WhatsApp</a>':"")+'<button class="btn d" style="margin-left:auto" data-a="del" '+k+'>Excluir</button></div></div>'}
+
+function vPainel(){
+ var t=today(),R=receipts(),yrs=Array.from(new Set([t.slice(0,4),PY].concat(R.map(function(r){return r.paidAt.slice(0,4)})))).sort().reverse(),
+ ann=R.filter(function(r){return r.paidAt.slice(0,4)===PY}),ms=[],i;
+ for(i=0;i<12;i++){var key=PY+"-"+p2(i+1);ms.push({key:key,i:i,total:r2(ann.filter(function(r){return r.paidAt.slice(0,7)===key}).reduce(function(s,r){return s+r.amount},0))})}
+ var vis=R.filter(function(r){return r.paidAt.slice(0,4)===PY&&(PM==="all"||r.paidAt.slice(5,7)===PM)}),total=vis.reduce(function(s,r){return s+r.amount},0),late=vis.filter(function(r){return r.late>0}).length,
+ act=S.loans.filter(function(l){return!settled(l)}),rem=act.reduce(function(s,l){return s+tot(l).remaining},0),mx=Math.max.apply(null,ms.map(function(m){return m.total}).concat([1]));
+ return'<div class="row" style="margin-bottom:16px"><span style="font-size:20px">📊</span><h2 class="fd" style="margin:0;font-size:20px;font-weight:500">Painel de empréstimos</h2></div>'+
+ '<div class="sbox"><div><b>'+act.length+"</b><span>Empréstimos ativos</span></div><div><b>"+brl(rem)+"</b><span>A receber</span></div><div><b>"+vis.length+"</b><span>Pagamentos no período</span></div></div>"+
+ '<div class="grid" style="margin:16px 0"><label class="l">Ano<select id="py">'+yrs.map(function(y){return"<option"+(y===PY?" selected":"")+">"+y+"</option>"}).join("")+'</select></label><label class="l">Mês<select id="pm"><option value="all">Ano completo</option>'+MN.map(function(n,j){var v=p2(j+1);return'<option value="'+v+'"'+(v===PM?" selected":"")+">"+n+"</option>"}).join("")+"</select></label></div>"+
+ '<section class="sec" style="border-top:1px solid var(--bd)"><div class="note" style="font-weight:500">Recebido '+(PM==="all"?"em "+PY:"em "+MN[+PM-1]+" de "+PY)+'</div><div class="fd tn" style="font-size:30px;font-weight:600;color:var(--pri);margin-top:4px">'+brl(total)+'</div><div class="grid" style="margin-top:12px;font-size:14px"><span style="color:var(--ok)">✓ <b>'+(vis.length-late)+'</b> no prazo</span><span class="late">⏰ <b>'+late+"</b> com atraso</span></div></section>"+
+ '<section class="sec"><div class="row sp" style="align-items:baseline"><b>Recebido por mês</b><span class="note">'+PY+" · "+brl(ann.reduce(function(s,r){return s+r.amount},0))+'</span></div><div class="ch" style="margin-top:12px">'+
+ ms.map(function(m){return'<div title="'+brl(m.total)+'"><i style="height:'+Math.round(m.total/mx*100)+'px"></i>'+MN[m.i].slice(0,3).toLowerCase()+"</div>"}).join("")+'</div><div class="mg">'+
+ ms.map(function(m){var on=PM===m.key.slice(5);return'<button data-pm="'+m.key.slice(5)+'" class="'+(on?"on":"")+'"><small>'+MN[m.i]+'</small><span class="tn">'+brl(m.total)+"</span></button>"}).join("")+"</div></section>"+
+ '<section style="padding-top:16px"><b>Histórico de pagamentos</b> <span class="note">('+vis.length+")</span>"+(vis.length?vis.map(function(r){var c=cn(r.clientId);return'<div class="hi"><div class="row sp"><div style="min-width:0"><b>'+esc(c?c.name:"Cliente")+'</b><div class="note">'+r.label+'</div></div><b class="n" style="font-size:14px">'+brl(r.amount)+'</b></div><div class="row sp" style="margin-top:4px"><div><div class="note">Vencimento: '+fd(r.due)+'</div><button class="ud" style="color:var(--pri);padding:0" data-a="edate" data-r="'+r.id+'">📅 Pago em '+fd(r.paidAt)+'</button></div><span style="font-size:12px;font-weight:500;color:var(--'+(r.late>0?"red":"ok")+')">'+(r.late>0?r.late+(r.late===1?" dia":" dias")+" de atraso":"No prazo")+"</span></div></div>"}).join(""):'<p class="note" style="text-align:center;padding:24px 0">Nenhum recebimento neste período.</p>')+"</section>"}
+
+function cliList(){
+ var q=Q.trim().toLowerCase(),rows=S.clients.filter(function(c){return c.name.toLowerCase().indexOf(q)>-1}).sort(function(a,b){return a.name.localeCompare(b.name)}).map(function(c){
+  var L=S.loans.filter(function(l){return l.client_id===c.id});return{c:c,n:L.length,lent:L.reduce(function(s,l){return s+l.principal},0),due:L.reduce(function(s,l){return s+tot(l).remaining},0),rn:L.reduce(function(s,l){return s+l.renewals.length},0),open:L.some(function(l){return!settled(l)})}});
+ if(!rows.length)return empty(Q?"Nenhum cliente encontrado":"Nenhum cliente ainda",Q?"Tente outro nome.":"Os clientes são cadastrados ao registrar um empréstimo.");
+ return rows.map(function(r){return'<div class="card"><div class="row sp"><div style="min-width:0"><b>'+esc(r.c.name)+'</b><div class="note">'+esc(r.c.phone||"Sem telefone")+'</div></div><span class="tag '+(r.n===0?"mu":r.open?"lt":"")+'">'+(r.n===0?"Sem empréstimo":r.open?"Em aberto":"Quitado")+"</span></div>"+
+  '<div class="grid" style="gap:4px 12px;margin-top:12px;font-size:14px"><span class="mu">Total emprestado</span><span class="n" style="text-align:right">'+brl(r.lent)+'</span><span class="mu">Empréstimos</span><span style="text-align:right">'+r.n+'</span><span class="mu">Renovou</span><span style="text-align:right">'+(r.rn?"Sim ("+r.rn+"x)":"Não")+'</span><span class="mu">A receber</span><b class="n" style="text-align:right">'+brl(r.due)+"</b></div></div>"}).join("")}
+function vClientes(){
+ var od=!D.ok&&(!S.last||Date.now()-Date.parse(S.last)>7*864e5);
+ return'<div class="card"><div class="ct">Cadastrar cliente</div><div class="grid"><label class="l full">Nome completo<input id="cn" autocomplete="off" placeholder="Ex.: Maria Souza"></label><label class="l full">WhatsApp (opcional)<input id="cp" type="tel" inputmode="tel" placeholder="(11) 99999-9999"></label></div><button class="btn big" style="margin-top:12px;min-height:48px" data-a="addcli">Cadastrar cliente</button></div>'+
+ '<input id="q" type="search" placeholder="🔍 Buscar por nome" value="'+esc(Q)+'" style="margin:0 0 12px"><div id="cl2">'+cliList()+"</div>"+
+ '<div class="card"><div class="fd" style="font-size:22px;font-weight:600">Backup</div><div class="note" style="font-size:14px">Seus dados ficam salvos neste aparelho. Exporte um backup de vez em quando.</div>'+(od?'<div class="note" style="margin-top:6px">'+(S.last?"Seu último backup em arquivo tem mais de 7 dias. Exporte uma nova cópia.":"Você ainda não exportou um backup em arquivo.")+"</div>":"")+
+ '<div class="row" style="margin-top:12px"><button class="btn" style="flex:1;min-height:44px" data-a="exp">📤 Exportar backup (JSON)</button></div><div id="dv">'+gBox()+driveBox()+"</div></div>"+
+ '<div class="card"><div class="fd" style="font-size:22px;font-weight:600">Importar backup</div><div class="note" style="font-size:14px;margin-bottom:10px">Restaure seus dados a partir de um arquivo .json exportado por este sistema. Os dados atuais são mesclados com os do arquivo.</div><div class="drop" id="drop" data-a="imp"><b>📥 Escolher arquivo JSON</b><small>ou arraste o arquivo para cá</small></div></div>'}
+function vCal(){
+ var p=cm.split("-"),y=+p[0],m=+p[1],f=new Date(y,m-1,1).getDay(),nd=new Date(y,m,0).getDate(),t=today(),map={},L=[];
+ S.loans.forEach(function(l){l.installments.forEach(function(x){if(!x.paidAt){(map[x.due]=map[x.due]||[]).push({l:l,x:x})}})});
+ var h='<div class="card"><div class="row sp" style="align-items:center;margin-bottom:12px"><button class="btn g" style="width:40px;padding:0" data-a="nm" data-k="-1" aria-label="Mês anterior">‹</button><span class="fd" style="font-size:18px">'+MN[m-1]+" "+y+'</span><button class="btn g" style="width:40px;padding:0" data-a="nm" data-k="1" aria-label="Próximo mês">›</button></div><div class="cal7">'+["D","S","T","Q","Q","S","S"].map(function(d){return'<span class="h">'+d+"</span>"}).join("");
+ for(var i=0;i<f;i++)h+="<span></span>";
+ for(var d=1;d<=nd;d++){var k=cm+"-"+p2(d);h+='<button class="'+(k===cs?"a":k===t?"t":"")+'" data-d="'+k+'">'+d+(map[k]?'<i class="'+(k<t?"lt":"")+'"></i>':"")+"</button>"}
+ L=map[cs]||[];
+ return h+'</div></div><p class="note" style="font-size:14px;font-weight:500;margin:0 0 8px">Vencimentos em '+fd(cs)+"</p>"+(L.length?L.map(function(o){var c=cn(o.l.client_id);return'<div class="card" style="padding:12px"><div class="row sp" style="align-items:center"><div style="min-width:0"><b>'+esc(c?c.name:"")+'</b><div class="note">'+(o.l.installments_count===1?"Pagamento único":"Parcela "+o.x.n+"/"+o.l.installments_count)+" · "+brl(o.x.amount)+'</div></div><button class="pg" style="height:40px" data-a="pay" data-l="'+o.l.id+'" data-i="'+o.x.n+'">Pagar</button></div></div>'}).join(""):'<div class="card note" style="text-align:center">Nada vence neste dia.</div>')}
+
+/* ===== backup automático na pasta do Google Drive (app Drive para computador) ===== */
+function driveUI(){var e=$("dv");if(e)e.innerHTML=gBox()+driveBox()}
+function driveBox(){
+ var h='<div class="ct" style="margin:16px 0 6px">💻 Pasta no computador (opcional)</div>';
+ if(!D.sup)return"";
+ if(!D.dir)return h+'<div class="note">Escolha a pasta “Meu Drive” do aplicativo Google Drive para computador. O sistema cria a pasta “save Meus Emprestimos” e grava nela o backup a cada alteração.</div><button class="btn" style="margin-top:10px;min-height:44px" data-a="drvpick">☁️ Conectar pasta do Drive</button>';
+ var st=D.perm==="prompt"?'<div class="alert" style="margin-bottom:10px">Gravação pausada pelo navegador. Toque em Reativar para voltar a salvar o backup.</div>':D.err?'<div class="alert" style="margin-bottom:10px">'+esc(D.err)+"</div>":D.ok?'<span class="tag">✓ Enviado às '+p2(D.at.getHours())+":"+p2(D.at.getMinutes())+"</span>":'<span class="tag mu">Aguardando</span>';
+ return h+'<div class="note" style="margin-bottom:8px">Pasta: <b>'+esc(D.dir.name)+"</b>. Grava o arquivo atual e uma cópia por dia.</div>"+st+'<div class="row" style="margin-top:10px">'+(D.perm==="prompt"?'<button class="btn" data-a="drvgo">Reativar</button>':'<button class="btn g" data-a="drvgo">Salvar agora</button>')+'<button class="btn g" data-a="drvpick">Trocar pasta</button></div>'}
+function bk(){return JSON.stringify({app:"meus-emprestimos",version:2,exportedAt:new Date().toISOString(),userName:S.user,clients:S.clients,loans:S.loans},null,2)}
+function driveSoon(){if(!D.dir||D.perm!=="granted")return;clearTimeout(D.timer);D.timer=setTimeout(driveNow,1200)}
+async function driveNow(){
+ if(!D.dir)return;if(D.busy){driveSoon();return}
+ D.busy=true;var c=chg;
+ try{
+  if(await D.dir.queryPermission({mode:"readwrite"})!=="granted"){D.perm="prompt";return}
+  var txt=bk(),names=["meus-emprestimos-atual.json","meus-emprestimos-"+today()+".json"];
+  for(var i=0;i<names.length;i++){var fh=await D.dir.getFileHandle(names[i],{create:true}),w=await fh.createWritable();await w.write(txt);await w.close()}
+  D.ok=true;D.at=new Date();D.err="";D.perm="granted";if(chg===c)dirty=false}
+ catch(e){D.err="Não foi possível gravar na pasta do Drive. Confira se ela ainda existe e tente de novo.";D.ok=false}
+ finally{D.busy=false;driveUI()}}
+async function drvPick(){
+ try{var h=await showDirectoryPicker({id:"meus-emprestimos",mode:"readwrite"}),
+  dir=h.name.toLowerCase()==="save meus emprestimos"?h:await h.getDirectoryHandle("save Meus Emprestimos",{create:true});
+  D.dir=dir;D.perm="granted";D.err="";try{await idb("readwrite",function(st){return st.put(dir,"driveDir")})}catch(e){}
+  toast("Pasta conectada: "+dir.name);driveUI();driveNow()}
+ catch(e){if(e&&e.name==="AbortError")return;toast("Não foi possível conectar a pasta. Abra o arquivo direto no navegador (duplo clique) e tente de novo.")}}
+async function driveInit(){
+ if(!D.sup)return;
+ try{var h=await idb("readonly",function(st){return st.get("driveDir")});if(!h)return;D.dir=h;D.perm=(await h.queryPermission({mode:"readwrite"}))==="granted"?"granted":"prompt";if(D.perm==="granted")driveNow();driveUI()}catch(e){}}
+/* ===== backup na nuvem: Google Drive (celular e computador) ===== */
+function gBox(){
+ var h='<div class="ct" style="margin:16px 0 6px">☁️ Google Drive (celular e computador)</div>';
+ if(location.protocol!=="https:"&&location.hostname!=="localhost")return h+'<div class="note">O envio pelo Google só funciona com o sistema publicado em um endereço https. Abra a versão hospedada para conectar.</div>';
+ if(!G.cid)return h+'<div class="note">Cole o ID do cliente Google (OAuth) para ativar o backup na nuvem.</div><label class="l" style="margin:8px 0">ID do cliente<input id="gid" autocomplete="off" placeholder="000000-xxxx.apps.googleusercontent.com"></label><button class="btn" style="min-height:44px" data-a="gsave">Salvar ID</button>';
+ if(!G.linked)return h+'<div class="note">Entre com a conta Google. O sistema cria a pasta “save Meus Emprestimos” no Drive e salva o backup lá a cada alteração.</div><button class="btn" style="margin-top:10px;min-height:44px" data-a="gsync">Conectar ao Google Drive</button>';
+ var st=G.err?'<div class="alert" style="margin-bottom:10px">'+esc(G.err)+"</div>":G.pend?'<span class="tag lt">Backup pendente</span> <span class="note">Toque em Sincronizar agora.</span>':G.ok?'<span class="tag">✓ Enviado às '+p2(G.at.getHours())+":"+p2(G.at.getMinutes())+"</span>":'<span class="tag mu">Conectado</span>';
+ return h+'<div class="note" style="margin-bottom:8px">Pasta <b>save Meus Emprestimos</b>: grava o arquivo atual e uma cópia por dia.</div>'+st+'<div class="row" style="margin-top:10px"><button class="btn" data-a="gsync">Sincronizar agora</button><button class="btn g" data-a="gres">Restaurar do Drive</button><button class="btn g" data-a="gout">Desconectar</button></div>'}
+function gLoad(){return new Promise(function(ok,no){if(window.google&&google.accounts&&google.accounts.oauth2)return ok();var sc=document.createElement("script");sc.src="https://accounts.google.com/gsi/client";sc.async=true;sc.onload=ok;sc.onerror=function(){no(new Error("net"))};document.head.appendChild(sc)})}
+function gToken(){return gLoad().then(function(){return new Promise(function(ok,no){
+ TC=google.accounts.oauth2.initTokenClient({client_id:G.cid,scope:"https://www.googleapis.com/auth/drive.file",
+  callback:function(r){if(r&&r.access_token){G.tok=r.access_token;G.exp=Date.now()+((+r.expires_in||3600)-90)*1000;ok(G.tok)}else no(new Error((r&&r.error)||"auth"))},
+  error_callback:function(e){no(new Error("popup "+((e&&e.type)||"")))}});
+ TC.requestAccessToken({prompt:""})})})}
+async function gApi(url,opt){opt=opt||{};opt.headers=Object.assign({Authorization:"Bearer "+G.tok},opt.headers);var r=await fetch(url,opt);if(r.status===401){G.tok=null;G.exp=0}if(!r.ok)throw new Error("http "+r.status);return r}
+async function gFolder(){
+ if(G.folder)return G.folder;
+ var q=encodeURIComponent("name='save Meus Emprestimos' and mimeType='application/vnd.google-apps.folder' and trashed=false"),
+ r=await(await gApi("https://www.googleapis.com/drive/v3/files?q="+q+"&fields=files(id)")).json();
+ if(r.files&&r.files.length)G.folder=r.files[0].id;
+ else{var c=await(await gApi("https://www.googleapis.com/drive/v3/files?fields=id",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:"save Meus Emprestimos",mimeType:"application/vnd.google-apps.folder"})})).json();G.folder=c.id}
+ return G.folder}
+async function gPut(name,txt){
+ var f=await gFolder(),q=encodeURIComponent("name='"+name+"' and '"+f+"' in parents and trashed=false"),
+ l=await(await gApi("https://www.googleapis.com/drive/v3/files?q="+q+"&fields=files(id)")).json(),id=l.files&&l.files[0]&&l.files[0].id,
+ bd="meu"+Date.now(),meta=id?{name:name}:{name:name,parents:[f]},
+ body="--"+bd+"\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n"+JSON.stringify(meta)+"\r\n--"+bd+"\r\nContent-Type: application/json\r\n\r\n"+txt+"\r\n--"+bd+"--";
+ await gApi("https://www.googleapis.com/upload/drive/v3/files"+(id?"/"+id:"")+"?uploadType=multipart&fields=id",{method:id?"PATCH":"POST",headers:{"Content-Type":"multipart/related; boundary="+bd},body:body})}
+function gSoon(){if(!G.cid||!G.linked)return;G.pend=true;gset("pend",true);badge();driveUI();clearTimeout(G.timer);G.timer=setTimeout(function(){gSync(false)},1500)}
+async function gSync(manual){
+ if(!G.cid||G.busy)return;
+ if((!G.tok||Date.now()>G.exp)&&!manual)return;
+ G.busy=true;var c=chg;
+ try{
+  if(!G.tok||Date.now()>G.exp)await gToken();
+  var txt=bk();await gPut("meus-emprestimos-atual.json",txt);await gPut("meus-emprestimos-"+today()+".json",txt);
+  G.linked=true;gset("linked",true);G.ok=true;G.at=new Date();G.err="";
+  if(chg===c){G.pend=false;gset("pend",false);dirty=false}
+  if(manual)toast("Backup enviado ao Google Drive")}
+ catch(e){G.ok=false;var m=String((e&&e.message)||e);
+  if(/404/.test(m))G.folder=null;
+  if(/popup|access_denied|auth|401/.test(m)){G.err="";if(manual)toast("Não foi possível entrar no Google. Permita a janela de login e tente de novo.")}
+  else G.err="Não foi possível enviar ao Google Drive. Confira a conexão e tente de novo."}
+ finally{G.busy=false;driveUI();badge()}}
+async function gRestore(){
+ try{
+  if(!G.tok||Date.now()>G.exp)await gToken();
+  var f=await gFolder(),q=encodeURIComponent("name='meus-emprestimos-atual.json' and '"+f+"' in parents and trashed=false"),
+  l=(await(await gApi("https://www.googleapis.com/drive/v3/files?q="+q+"&fields=files(id,modifiedTime)")).json()).files||[];
+  if(!l.length){toast("Nenhum backup encontrado na pasta do Drive");return}
+  var txt=await(await gApi("https://www.googleapis.com/drive/v3/files/"+l[0].id+"?alt=media")).text(),m=new Date(l[0].modifiedTime);
+  ask("Restaurar do Drive?","Backup de "+m.toLocaleDateString("pt-BR")+" às "+p2(m.getHours())+":"+p2(m.getMinutes())+". Os dados serão mesclados com os deste aparelho; registros com o mesmo identificador serão substituídos pelos do Drive. Use ao trocar de aparelho.","Restaurar",function(){try{var d=restore(txt);toast("Restaurados "+d.clients.length+" clientes e "+d.loans.length+" empréstimos")}catch(x){toast("Backup do Drive inválido. Nada foi alterado.")}},true)}
+ catch(e){toast("Não foi possível ler o Drive. Tente de novo.")}}
+function gOut(){try{if(G.tok&&window.google)google.accounts.oauth2.revoke(G.tok,function(){})}catch(e){}G.tok=null;G.exp=0;G.linked=false;G.pend=false;G.ok=false;G.folder=null;gset("linked",false);gset("pend",false);driveUI();badge();toast("Google Drive desconectado")}
+window.addEventListener("beforeunload",function(e){if(dirty){e.preventDefault();e.returnValue=""}});
+
+/* ===== backup ===== */
+function exp(){
+ var txt=JSON.stringify({app:"meus-emprestimos",version:2,exportedAt:new Date().toISOString(),userName:S.user,clients:S.clients,loans:S.loans},null,2);
+ try{var a=document.createElement("a"),u=URL.createObjectURL(new Blob([txt],{type:"application/json"}));a.href=u;a.download="meus-emprestimos-backup-"+today()+".json";document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},1500);change({last:new Date().toISOString()});dirty=false;toast("Backup exportado")}
+ catch(e){toast("Não foi possível exportar o backup. Tente novamente.")}}
+function restore(txt){
+ var d=JSON.parse(txt);if(!Array.isArray(d.clients)||!Array.isArray(d.loans))throw 0;
+ d.clients.forEach(function(c){if(!c.id||!c.name)throw 0;c.phone=c.phone||""});
+ d.loans.forEach(function(l){if(!l.id||!l.client_id||!Array.isArray(l.installments)||!l.installments.length||!(l.principal>0))throw 0;l.renewals=l.renewals||[]});
+ var c2=mergeById(S.clients,d.clients),l2=mergeById(S.loans,d.loans);
+ if(l2.some(function(l){return!c2.some(function(c){return c.id===l.client_id})}))throw 0;
+ change(S.user||!cleanName(d.userName)?{clients:c2,loans:l2}:{clients:c2,loans:l2,user:cleanName(d.userName)});return d}
+
+/* ===== eventos ===== */
+document.addEventListener("click",function(e){
+ var pmb=e.target.closest("[data-pm]");if(pmb){PM=PM===pmb.dataset.pm?"all":pmb.dataset.pm;render();return}
+ var b=e.target.closest("[data-a],[data-t],[data-d]");if(!b)return;
+ if(b.dataset.t){tab=b.dataset.t;render();window.scrollTo(0,0);return}
+ if(b.dataset.d){cs=b.dataset.d;render();return}
+ var a=b.dataset.a,n=+b.dataset.i,L=S.loans.find(function(x){return x.id===b.dataset.l}),t=today();
+ if(a==="retry")retry();
+ else if(a==="add"){
+  var name=$("fn").value.trim(),f=rf(),c=calc(f),ph=$("fp").value.trim(),fz=$("fz").value,f1=$("f1").value;
+  if(!name){toast("Informe o nome do cliente");return}
+  if(f.principal<=0){toast("Informe o valor emprestado");return}
+  if(!fz||!f1){toast("Informe o 1º vencimento");return}
+  var cl=S.clients.find(function(x){return x.name.trim().toLowerCase()===name.toLowerCase()}),nc=null;
+  if(!cl)nc={id:uid(),name:name,phone:ph};else if(ph&&ph!==cl.phone)nc=Object.assign({},cl,{phone:ph});
+  tab="ativos";saveLoan({id:uid(),client_id:nc?nc.id:cl.id,principal:f.principal,interest_rate:f.rate,interest_type:f.type,surcharge_rate:c.n>=2?f.sur:0,installments_count:c.n,loan_date:fz,first_due:f1,installments:build(c.amounts,f1),renewals:[]},nc);
+  toast("Empréstimo de "+brl(f.principal)+" para "+(nc?nc.name:cl.name)+" registrado")}
+ else if(a==="pay"&&L){saveLoan(mapI(L,function(i){return i.n===n?Object.assign({},i,{paidAt:t}):i}));toast("Parcela "+n+" paga")}
+ else if(a==="unpay"&&L)ask("Desfazer pagamento?","A parcela "+n+" voltará a ficar pendente.","Desfazer",function(){saveLoan(mapI(L,function(i){return i.n===n?Object.assign({},i,{paidAt:null}):i}));toast("Pagamento desfeito")});
+ else if(a==="ren"&&L){var nm=(cn(L.client_id)||{}).name,am=r2(L.principal*L.interest_rate/100);ask("Renovar empréstimo?",nm+" paga só os juros de "+brl(am)+" e o vencimento avança 1 mês.","Renovar",function(){var i0=L.installments[0],to=addM(L.first_due,L.renewals.length+1);saveLoan(Object.assign({},L,{installments:[Object.assign({},i0,{due:to})],renewals:L.renewals.concat([{date:t,amount:am,fromDue:i0.due,toDue:to}])}));toast("Renovação registrada")})}
+ else if(a==="set"&&L)ask("Quitar empréstimo?","Valor restante: "+brl(tot(L).remaining)+".\nTodas as parcelas pendentes serão marcadas como pagas hoje.","Quitar",function(){saveLoan(mapI(L,function(i){return i.paidAt?i:Object.assign({},i,{paidAt:t})}));toast("Empréstimo quitado 🎉")});
+ else if(a==="del"&&L)ask("Excluir empréstimo?","O empréstimo de "+brl(L.principal)+" de "+((cn(L.client_id)||{}).name||"Cliente")+" será apagado definitivamente.","Excluir",function(){change({loans:S.loans.filter(function(x){return x.id!==L.id})});toast("Empréstimo excluído")},true);
+ else if(a==="edate"){var r=receipts().find(function(x){return x.id===b.dataset.r}),ln=r&&S.loans.find(function(x){return x.id===r.loanId});if(!ln)return;
+  askDate(r.paidAt,function(v){saveLoan(r.kind==="i"?Object.assign({},ln,{installments:ln.installments.map(function(i,k){return k===r.index?Object.assign({},i,{paidAt:v}):i})}):Object.assign({},ln,{renewals:ln.renewals.map(function(x,k){return k===r.index?Object.assign({},x,{date:v}):x})}));toast("Data de pagamento atualizada")})}
+ else if(a==="nm"){cm=addM(cm+"-01",+b.dataset.k).slice(0,7);render()}
+ else if(a==="setname"){var nn=cleanName($("un").value);if(!nn){toast("Informe seu nome completo (nome e sobrenome)");return}change({user:nn});toast("Bem-vindo(a), "+nn.split(" ")[0]+"!")}
+ else if(a==="theme")setTheme(isDark(getTheme())?"light":"dark");
+ else if(a==="profile"){if(S.user)openProfile()}
+ else if(a==="addcli"){var cnm=$("cn").value.trim().replace(/\s+/g," ");if(!cnm){toast("Informe o nome do cliente");return}
+  if(S.clients.some(function(x){return x.name.trim().toLowerCase()===cnm.toLowerCase()})){toast("Esse cliente já está cadastrado");return}
+  change({clients:S.clients.concat([{id:uid(),name:cnm,phone:$("cp").value.trim()}])});toast("Cliente cadastrado")}
+ else if(a==="gsave"){var gv=$("gid").value.trim();if(!/\.apps\.googleusercontent\.com$/.test(gv)){toast("ID inválido. Ele termina com .apps.googleusercontent.com");return}G.cid=gv;gset("cid",gv);driveUI();toast("ID salvo")}
+ else if(a==="gsync")gSync(true);
+ else if(a==="gres")gRestore();
+ else if(a==="gout")ask("Desconectar do Google Drive?","Os backups já enviados continuam na pasta do Drive. O envio automático para.","Desconectar",gOut,true);
+ else if(a==="drvpick")drvPick();
+ else if(a==="drvgo"){(async function(){try{if(D.dir&&(await D.dir.requestPermission({mode:"readwrite"}))==="granted"){D.perm="granted"}else{toast("Permissão não concedida");return}}catch(e){toast("Permissão não concedida");return}await driveNow();toast(D.ok?"Backup salvo na pasta do Drive":"Não foi possível salvar o backup")})()}
+ else if(a==="exp")exp();
+ else if(a==="imp")$("fi").click()});
+function onf(e){var el=e.target;
+ if(tab==="novo"&&el.closest&&el.closest("#nf"))prev();
+ if(el.id==="q"){Q=el.value;$("cl2").innerHTML=cliList()}
+ if(e.type==="change"&&el.id==="py"){PY=el.value;PM="all";render()}
+ if(e.type==="change"&&el.id==="pm"){PM=el.value;render()}}
+document.addEventListener("input",onf);document.addEventListener("change",onf);
+function importFile(f){if(!f)return;var r=new FileReader();
+ r.onload=function(){var txt=r.result;
+  ask("Restaurar backup?","Os dados serão mesclados neste aparelho. Registros com o mesmo identificador serão substituídos; os demais serão mantidos.","Restaurar",function(){try{var d=restore(txt);toast("Restaurados "+d.clients.length+" clientes e "+d.loans.length+" empréstimos")}catch(x){toast("Arquivo de backup inválido. Nada foi alterado.")}},true)};
+ r.readAsText(f)}
+$("fi").addEventListener("change",function(e){importFile(e.target.files[0]);e.target.value=""});
+function dz(e){return e.target.closest&&e.target.closest("#drop")}
+document.addEventListener("dragover",function(e){var d=dz(e);if(d){e.preventDefault();d.classList.add("on")}});
+document.addEventListener("dragleave",function(e){var d=dz(e);if(d)d.classList.remove("on")});
+document.addEventListener("drop",function(e){var d=dz(e);if(d){e.preventDefault();d.classList.remove("on");importFile(e.dataTransfer.files[0])}});
+document.addEventListener("keydown",function(e){if(e.key==="Enter"&&e.target.id==="un"){var b=document.querySelector('[data-a="setname"]');if(b)b.click()}});
+window.addEventListener("pagehide",function(){if(S.loaded&&S.status!=="saved")persist(snap())});
+applyTheme(getTheme());render();load();driveInit();setInterval(setDt,30000);
+try{matchMedia("(prefers-color-scheme:dark)").addEventListener("change",function(){applyTheme(getTheme())})}catch(e){}
+</script>
+</body>
+</html>
