@@ -136,7 +136,7 @@ function receipts(){var out=[];S.loans.forEach(function(l){
 /* ===== salvamento local: IndexedDB + localStorage + 5 cópias ===== */
 var LK="meus-emprestimos:local:v1",SK=LK+":snapshots",DBN="meus-emprestimos-local";
 var D={sup:!!window.showDirectoryPicker,dir:null,perm:"none",ok:false,at:null,err:"",busy:false,timer:null},dirty=false,chg=0;
-var GCID="",GK="meus-emprestimos:google";
+var GCID="94080863705-39sf07tjphq7280n7tvqd1iketnmlro0.apps.googleusercontent.com",GK="meus-emprestimos:google";
 function gget(k){try{return localStorage.getItem(GK+":"+k)||""}catch(e){return""}}
 function gset(k,v){try{if(v)localStorage.setItem(GK+":"+k,v===true?"1":v);else localStorage.removeItem(GK+":"+k)}catch(e){}}
 var G={cid:GCID||gget("cid"),tok:null,exp:0,folder:null,linked:gget("linked")==="1",pend:gget("pend")==="1",ok:false,at:null,err:"",busy:false,timer:null},TC=null;
