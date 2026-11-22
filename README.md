@@ -9,15 +9,31 @@ Os dados ficam **no aparelho de cada pessoa** (navegador) e, se você conectar, 
 
 ```
 index.html              o sistema inteiro (HTML, CSS e JavaScript)
+sw.js                   guarda o app no aparelho para abrir sem internet
 manifest.webmanifest    permite "Adicionar à tela inicial" no celular
+fonts/                  fontes do app (Cormorant Garamond e Inter), hospedadas aqui
 icons/                  ícones do app
 netlify.toml            configuração do Netlify (opcional)
 .nojekyll               evita processamento do Jekyll no GitHub Pages
 .gitignore              impede subir backups .json por engano
 ```
 
+## Segurança e recursos
 
-## 1) Ativar o backup no Google Drive
+- **PIN de 4 dígitos (opcional):** em Perfil → Segurança. O app pede o PIN ao abrir e quando você volta depois de mais de **30 minutos** fora. Editar ou excluir um empréstimo também pede o PIN. O PIN protege contra quem pega o celular desbloqueado. Ele **não criptografa** os dados.
+- **Esqueci o PIN:** se o Google Drive estiver conectado, dá para **recuperar pela conta Google** (a mesma do Drive) e criar um novo PIN, sem perder dados. Para isso o app guarda no aparelho só um identificador da conta e o e-mail mascarado. Se o Drive não estiver conectado, a única saída é apagar os dados do aparelho e restaurar um backup depois. Conectar o Drive antes de criar o PIN é o ideal.
+- **Funciona sem internet:** depois da primeira visita, o app abre sem rede. Com internet, ele sempre busca a versão mais nova. Os dados dos empréstimos nunca ficam nesse cache.
+- **Se o app parecer desatualizado:** Perfil → Aplicativo → Atualizar app (não apaga dados).
+- **Multa por atraso e busca em Ativos:** opcionais, ligados em Perfil → Recursos opcionais.
+
+## 1) Publicar no Netlify (mais simples)
+
+1. Crie uma conta em https://app.netlify.com (gratuita).
+2. Em **Add new site → Deploy manually**, arraste a **pasta descompactada** `meus-emprestimos-site`.
+3. Em **Site configuration → Change site name**, escolha um nome. O endereço será `https://NOME.netlify.app`.
+4. Para atualizar depois: **Deploys → Drag and drop** com a pasta nova (inclua `index.html`, `sw.js` e a pasta `fonts`).
+
+## 2) Ativar o backup no Google Drive
 
 O Google só aceita login em endereços `https`. Faça depois que o site estiver no ar.
 
@@ -33,9 +49,32 @@ O Google só aceita login em endereços `https`. Faça depois que o site estiver
    - Pode adicionar os dois no mesmo ID do cliente.
 5. Copie o **ID do cliente** (termina com `.apps.googleusercontent.com`) e use **uma** das opções:
    - cole no próprio app, em **Clientes → Backup → Google Drive → ID do cliente** (precisa repetir em cada aparelho); ou
-   - escreva uma vez no `index.html`, na linha `var GCID="";`, e publique de novo (vale para todos os aparelhos).
+   - escreva uma vez no `index.html`, na linha `var GCID="",GK="meus-emprestimos:google";`, colocando o ID entre as **primeiras** aspas e sem mexer no resto da linha, e publique de novo (vale para todos os aparelhos).
 6. Toque em **Conectar ao Google Drive**. O sistema cria a pasta `save Meus Emprestimos` e grava o backup a cada alteração.
 
 O ID do cliente **não é segredo**, pode ficar no código.
 
+## 3) Publicar no GitHub Pages (alternativa)
 
+O GitHub Pages gratuito exige repositório **público**. Como aqui só há o código, sem dados, isso não expõe empréstimos.
+
+1. Crie um repositório público, por exemplo `meus-emprestimos`.
+2. Envie o conteúdo desta pasta (pelo site, com **Add file → Upload files**, ou por Git):
+   ```
+   git init
+   git add .
+   git commit -m "Primeira versão"
+   git branch -M main
+   git remote add origin https://github.com/USUARIO/meus-emprestimos.git
+   git push -u origin main
+   ```
+3. Em **Settings → Pages**: *Source* = **Deploy from a branch**, branch **main**, pasta **/ (root)**.
+4. O endereço será `https://USUARIO.github.io/meus-emprestimos/`.
+   - Na origem autorizada do Google use só `https://USUARIO.github.io`.
+
+## Cuidados
+
+- **Nunca suba backups.** Arquivos `meus-emprestimos-*.json` têm os dados reais. O `.gitignore` bloqueia `*.json`.
+- **Cada endereço tem seu próprio armazenamento.** Ao trocar de endereço (por exemplo, de Netlify para GitHub), os dados não vão junto. Use **Exportar backup** e **Importar backup**, ou **Restaurar do Drive**.
+- **iPhone:** o Safari e o app da tela inicial não compartilham dados. Escolha um e use sempre o mesmo.
+- Escolha **um** endereço principal para o uso diário e mantenha o outro apenas como reserva.
