@@ -120,6 +120,43 @@ button:focus-visible,a:focus-visible,[data-d]:focus-visible,summary:focus-visibl
 .modal .mb{max-height:92vh;overflow:auto}
 .mo summary{cursor:pointer;color:var(--mu);font-size:13px;padding:12px 0 2px;list-style:none}.mo summary::-webkit-details-marker{display:none}
 .mo[open] summary{color:var(--ac)}
+/* ===== ajustes de layout (iPhone) ===== */
+body{font-variant-numeric:lining-nums;font-feature-settings:"lnum" 1}
+.top{align-items:center}.top h1{font-size:clamp(25px,7.4vw,32px)}
+.tg{height:44px;width:72px}.tg .thumb{top:5px;left:4px;width:32px;height:32px}.tg.dk .thumb{transform:translateX(32px)}
+.av{width:44px;height:44px}
+.btn{min-height:44px}.pg,.ud{height:44px;min-height:44px}.x{min-height:44px;min-width:44px}
+.chips button{height:44px}
+nav button,.tag,.sv,.hint,.k3 p,.sbox span,.cal7 .h{font-size:12px}
+.ch div{font-size:11px}
+.sbox span{line-height:1.25}
+.sw2{min-height:44px}
+.mo summary{min-height:44px;display:flex;align-items:center;padding:0;font-size:14px}
+#nav:empty{display:none}
+.sp{flex-wrap:nowrap}
+.sp>*:first-child{min-width:0;overflow-wrap:anywhere}
+.sp>.tag,.sp>b.n,.sp>.btn,.sp>.pg,.sp>span:last-child:not(:first-child){flex:none;text-align:right}
+ul.l li{flex-wrap:wrap;gap:4px 8px}
+.ri{flex:1 1 auto;min-width:0}.ri span{margin-left:6px}
+ul.l li>button{margin-left:auto;flex:none}
+.modal{padding:max(20px,env(safe-area-inset-top,0px)) 20px max(20px,env(safe-area-inset-bottom,0px))}
+.modal .mb{max-height:calc(100dvh - max(20px,env(safe-area-inset-top,0px)) - max(20px,env(safe-area-inset-bottom,0px)));overscroll-behavior:contain}
+.modal:focus,.mb:focus{outline:none}
+.gate .greet{display:none}
+.ch div,.ri small,.mg small{font-size:12px}
+.sw button{width:44px;height:44px}.seg button{height:44px}
+.toast button{min-height:44px;padding:0 6px}
+.lock .lk{min-height:44px;padding:0 14px}
+[data-a="nm"]{width:44px!important}
+.sw{gap:8px}
+.grid>*{min-width:0}
+.grid input,.grid select{min-width:0;max-width:100%}
+input[type=date]{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;text-align:left}
+input[type=date]::-webkit-date-and-time-value{text-align:left;min-height:1.2em}
+.sw{flex-wrap:wrap}
+.stat b,.sbox b,.hero b,.greet h2,.top h1,.ring,.mb h4,.lock h3,.fd,.k3 b{font-variant-numeric:lining-nums;font-feature-settings:"lnum" 1}
+@media (max-width:400px){.cal7{gap:2px}.grid input,.grid select{padding:0 8px}}
+.top>div:first-child{min-width:0}.top h1{font-size:clamp(20px,6.6vw,32px);white-space:nowrap}
 </style>
 </head>
 <body>
@@ -165,6 +202,7 @@ function askFee(x,fee,cb){if(document.querySelector(".modal"))return;var o=docum
  o.innerHTML='<div class="mb"><h4>Parcela em atraso</h4><p>Venceu em '+fd(x.due)+". A multa configurada é de "+brl(fee)+'. Deseja cobrar a multa?</p><div class="row" style="flex-direction:column;align-items:stretch"><button class="btn" data-m="f">Receber com multa ('+brl(x.amount+fee)+')</button><button class="btn g" data-m="s">Receber sem multa ('+brl(x.amount)+')</button><button class="btn g" data-m="n">Cancelar</button></div></div>';
  o.addEventListener("click",function(e){var m=e.target.getAttribute("data-m");if(!m&&e.target!==o)return;o.remove();if(m==="f")cb(fee);else if(m==="s")cb(0)});document.body.appendChild(o)}
 function mapI(l,f){return Object.assign({},l,{installments:l.installments.map(f)})}
+function fmtPhone(p){var d=String(p||"").replace(/\D/g,"");if(d.length===13&&d.indexOf("55")===0)d=d.slice(2);if(d.length===11)return"("+d.slice(0,2)+") "+d.slice(2,7)+"-"+d.slice(7);if(d.length===10)return"("+d.slice(0,2)+") "+d.slice(2,6)+"-"+d.slice(6);return String(p||"")}
 function cn(id){return S.clients.find(function(c){return c.id===id})}
 function mergeById(a,b){var m=new Map();a.concat(b).forEach(function(x){m.set(x.id,x)});return Array.from(m.values())}
 function delay(p,d){return Math.max(0,Math.round((Date.parse(p.slice(0,10)+"T00:00:00Z")-Date.parse(d.slice(0,10)+"T00:00:00Z"))/864e5))}
@@ -221,14 +259,14 @@ function cleanName(s){s=String(s||"").trim().replace(/\s+/g," ");var w=s.split("
 function vGate(){return'<div class="card" style="text-align:center;padding:24px 18px"><div class="fd" style="font-size:22px;margin-bottom:6px">Bem-vindo(a)</div><p class="note" style="font-size:14px;margin:0 0 16px">Para começar, informe seu nome completo. Ele aparece na saudação e fica salvo neste aparelho.</p><label class="l" style="text-align:left">Nome completo<input id="un" autocomplete="name" placeholder="Ex.: Maria da Silva Souza"></label><button class="btn big" style="margin-top:14px" data-a="setname">Continuar</button></div>'}
 function askName(cur,fn){var o=document.createElement("div");o.className="modal";o.innerHTML='<div class="mb"><h4>Seu nome completo</h4><label class="l" style="margin-bottom:14px">Nome e sobrenome<input id="un2" autocomplete="name" value="'+esc(cur)+'"></label><div class="row" style="justify-content:flex-end"><button class="btn g" data-m="n">Cancelar</button><button class="btn" data-m="y">Salvar</button></div></div>';o.addEventListener("click",function(e){var m=e.target.getAttribute("data-m");if(m==="n"||e.target===o)o.remove();else if(m==="y"){var v=cleanName($("un2").value);if(!v){toast("Informe seu nome completo (nome e sobrenome)");return}o.remove();fn(v)}});document.body.appendChild(o)}
 var AVC=["linear-gradient(135deg,#25a882,#0d6b52)","linear-gradient(135deg,#e6c25a,#b98a2a)","linear-gradient(135deg,#5aa9c9,#2f6f8f)","linear-gradient(135deg,#b78bc9,#7c4f96)","linear-gradient(135deg,#e5806a,#b8382a)"],TK="meus-emprestimos:theme";
-function setDt(){var d=new Date(),w=d.toLocaleDateString("pt-BR",{weekday:"long",day:"numeric",month:"long"});$("dt").textContent=w.charAt(0).toUpperCase()+w.slice(1)+" · "+p2(d.getHours())+":"+p2(d.getMinutes())}
+function setDt(){var d=new Date(),nar=window.innerWidth<400,w=d.toLocaleDateString("pt-BR",{weekday:nar?"short":"long",day:"numeric",month:nar?"short":"long"});$("dt").textContent=w.charAt(0).toUpperCase()+w.slice(1)+" · "+p2(d.getHours())+":"+p2(d.getMinutes())}
 function getTheme(){try{return localStorage.getItem(TK)||"auto"}catch(e){return"auto"}}
 function isDark(m){return m==="dark"||(m!=="light"&&window.matchMedia&&matchMedia("(prefers-color-scheme:dark)").matches)}
 function applyTheme(m){var r=document.documentElement;if(m==="light"||m==="dark")r.setAttribute("data-theme",m);else r.removeAttribute("data-theme");$("tg").classList.toggle("dk",isDark(m))}
 function setTheme(m){try{localStorage.setItem(TK,m)}catch(e){}applyTheme(m)}
 function openProfile(){
  var sel=S.avatar||0,op=Object.assign({fee:false,search:false},S.opts||{}),o=document.createElement("div");o.className="modal";
- function pinRow(){var e=o.querySelector("#pinrow");if(!e)return;e.innerHTML=!CR?'<span class="note">PIN indisponível neste navegador (use o site em https).</span>':hasPin()?'<button class="btn g" data-m="p2">Alterar PIN</button><button class="btn g" data-m="p3">Desativar PIN</button>':'<button class="btn g" data-m="p1">Criar PIN (4 dígitos)</button>'}
+ function pinRow(){var e=o.querySelector("#pinrow");if(!e)return;e.innerHTML=!CR?'<span class="note">PIN indisponível neste navegador (use o site em https).</span>':hasPin()?'<button class="btn g" data-m="p2">Alterar PIN</button><button class="btn g" data-m="p3">Desativar PIN</button>'+(BIOAV?(bioId()?'<button class="btn g" data-m="b0">Desativar Face ID / biometria</button>':'<button class="btn g" data-m="b1">Ativar Face ID / biometria</button>'):""):'<button class="btn g" data-m="p1">Criar PIN (4 dígitos)</button>'}
  function paint(){var m=getTheme();o.querySelectorAll("[data-c]").forEach(function(b){b.classList.toggle("on",+b.dataset.c===sel)});o.querySelectorAll("[data-th]").forEach(function(b){b.classList.toggle("on",b.dataset.th===m)});pinRow()}
  o.innerHTML='<div class="mb"><h4>Perfil</h4><label class="l">Nome completo<input id="un2" autocomplete="name" value="'+esc(S.user)+'"></label><div class="lb" style="margin:14px 0 6px">Cor do avatar</div><div class="sw">'+AVC.map(function(c,i){return'<button data-c="'+i+'" style="background:'+c+'" aria-label="Cor '+(i+1)+'"></button>'}).join("")+'</div><div class="lb" style="margin:14px 0 6px">Tema</div><div class="seg">'+[["auto","Automático"],["light","Claro"],["dark","Escuro"]].map(function(t){return'<button data-th="'+t[0]+'">'+t[1]+"</button>"}).join("")+
  '</div><div class="lb" style="margin:14px 0 2px">Recursos opcionais</div><label class="sw2"><span>Multa por atraso nos empréstimos</span><input type="checkbox" id="of1"'+(op.fee?" checked":"")+'></label><label class="sw2"><span>Busca na lista de Ativos</span><input type="checkbox" id="of2"'+(op.search?" checked":"")+'></label>'+
@@ -237,19 +275,22 @@ function openProfile(){
   if(b&&b.dataset.c!==undefined){sel=+b.dataset.c;paint();return}
   if(b&&b.dataset.th){setTheme(b.dataset.th);paint();return}
   if(e.target===o||m==="n"){o.remove();return}
+  if(m==="b1"){(async function(){try{var id=await bioCreate();if(!id){toast("Não foi possível ativar a biometria.");return}var ok=await pinVerify("Confirme com o PIN para ativar",true);if(ok){localStorage.setItem(BK,id);toast("Face ID / biometria ativado")}}catch(x){toast("Não foi possível ativar a biometria neste aparelho.")}pinRow()})();return}
+  if(m==="b0"){try{localStorage.removeItem(BK)}catch(x){}toast("Biometria desativada");pinRow();return}
   if(m==="p1"){pinCreate().then(pinRow);return}
   if(m==="p2"){pinVerify("PIN atual").then(function(ok){if(ok)return pinCreate()}).then(pinRow);return}
-  if(m==="p3"){pinVerify("PIN atual").then(function(ok){if(ok){try{localStorage.removeItem(PK)}catch(x){}pgood();toast("PIN desativado")}}).then(pinRow);return}
+  if(m==="p3"){pinVerify("PIN atual").then(function(ok){if(ok){try{localStorage.removeItem(PK);localStorage.removeItem(BK)}catch(x){}pgood();toast("PIN desativado")}}).then(pinRow);return}
   if(m==="r"){ask("Atualizar app","Isso limpa o cache do aplicativo e recarrega a página. Seus empréstimos e clientes não são apagados.","Atualizar",hardRefresh);return}
   if(m==="y"){var v=cleanName($("un2").value);if(!v){toast("Informe seu nome completo (nome e sobrenome)");return}var of1=$("of1").checked,of2=$("of2").checked;o.remove();change({user:v,avatar:sel,opts:{fee:of1,search:of2}});toast("Perfil atualizado")}});
- document.body.appendChild(o);paint()}
+ document.body.appendChild(o);paint();bioAvail().then(function(v){BIOAV=v;pinRow()})}
 function render(){
  var h=new Date().getHours(),g=h<12?"Bom dia":h<18?"Boa tarde":"Boa noite";
  $("g1").textContent=g;$("g2").textContent=S.user||"Olá!";setDt();
  $("av").textContent=S.user?S.user.trim().charAt(0).toUpperCase():"•";$("av").style.background=AVC[S.avatar||0]||AVC[0];
  if(!S.loaded){$("nav").innerHTML="";$("v").innerHTML='<p class="note" style="text-align:center;padding:48px 0">Carregando…</p>';badge();return}
- if(!S.user){$("nav").innerHTML="";$("v").innerHTML=vGate();badge();return}
+ if(!S.user){document.body.classList.add("gate");$("nav").innerHTML="";$("v").innerHTML=vGate();badge();return}
  document.body.classList.toggle("wide",tab==="painel");
+ document.body.classList.remove("gate");
  $("nav").innerHTML=TABS.map(function(t){return'<button class="'+(t[0]===tab?"on":"")+'" data-t="'+t[0]+'" aria-pressed="'+(t[0]===tab)+'"><i aria-hidden="true">'+t[1]+"</i>"+t[2]+"</button>"}).join("");
  var html="",okv=true;try{html=({novo:vNovo,ativos:vAtivos,painel:vPainel,clientes:vClientes,cal:vCal})[tab]()}catch(e){okv=false;html='<div class="card"><b>Algo deu errado ao abrir esta tela.</b><p class="note">Seus dados não foram apagados. Exporte um backup e recarregue a página.</p><button class="btn" data-a="exp">📤 Exportar backup</button></div>'}
  $("v").innerHTML='<div class="fi'+(ANIM?" an":"")+'">'+html+"</div>";ANIM=false;if(tab==="novo"&&okv)prev();badge()}
@@ -262,7 +303,7 @@ function vNovo(){F1M=false;var t=today(),o="";for(var n=1;n<=12;n++)o+='<option 
  return'<div id="nf"><div class="card"><div class="grid">'+
  '<label class="l full">Nome do cliente<input id="fn" list="cl" autocomplete="off" placeholder="Ex.: Maria Souza"><datalist id="cl">'+S.clients.map(function(c){return'<option value="'+esc(c.name)+'">'}).join("")+"</datalist></label>"+
  '<label class="l">WhatsApp<input id="fp" type="tel" inputmode="tel" placeholder="(11) 99999-9999"></label>'+
- '<label class="l">Valor (R$)<input id="fv" inputmode="decimal" placeholder="1.000,00"><span id="fvh" class="hint" style="display:block;margin-top:3px;min-height:14px"></span></label>'+
+ '<label class="l">Valor (R$)<input id="fv" inputmode="decimal" placeholder="1.000,00"><span id="fvh" class="hint" style="display:block;margin-top:3px"></span></label>'+
  '<label class="l">Parcelas<select id="fx">'+o+"</select></label>"+
  '<label class="l">Tipo de juros<select id="fm"><option value="fixed">Fixo</option><option value="monthly">Ao mês</option></select></label>'+
  '<div class="hint full">Fixo: juros uma única vez sobre o valor. Ao mês: juros × número de parcelas.</div>'+
@@ -279,7 +320,7 @@ function prev(){
  var f0=rf(),c=calc(f0),last=c.amounts[c.n-1];
  $("fvh").textContent=f0.principal>0?"Valor entendido: "+brl(f0.principal):"";
  $("pt").textContent=brl(c.total);
- $("ps").textContent=c.n+"x de "+brl(c.per)+(c.n>1&&last!==c.per?" (última "+brl(last)+")":"")+" · juros "+brl(c.interest)+(c.n>=2?" · acréscimo "+brl(c.surcharge):"")}
+ $("ps").textContent=f0.principal>0?c.n+"x de "+brl(c.per)+(c.n>1&&last!==c.per?" (última "+brl(last)+")":"")+" · juros "+brl(c.interest)+(c.n>=2?" · acréscimo "+brl(c.surcharge):""):"Informe o valor emprestado para ver o cálculo"}
 
 function vAtivos(){
  var Dn=S.loans.filter(settled),chips='<div class="chips"><button data-a="avf" data-v="ativos" class="'+(AVF==="ativos"?"on":"")+'">Ativos</button><button data-a="avf" data-v="quit" class="'+(AVF==="quit"?"on":"")+'">Quitados ('+Dn.length+")</button></div>";
@@ -308,15 +349,18 @@ function vAtivosMain(){
  return h+srch()+'<div id="al">'+alHtml()+"</div>"}
 function loanCard(l){
  var T=tot(l),late=overdue(l),done=settled(l),pct=T.total?Math.round(T.paid/T.total*100):0,t=today(),c=cn(l.client_id)||{name:"Cliente",phone:""},k='data-l="'+l.id+'"',
- msg=T.next?"Olá "+c.name+", tudo bem? Passando para lembrar da parcela "+T.next.n+"/"+l.installments_count+" de "+brl(T.next.amount)+" com vencimento em "+fd(T.next.due)+". Valor em aberto: "+brl(T.remaining)+". Obrigado!":"Olá "+c.name+", tudo bem?";
+ msg=T.next?"Olá "+c.name+", tudo bem? Passando para lembrar da parcela "+T.next.n+"/"+l.installments_count+" de "+brl(T.next.amount)+" com vencimento em "+fd(T.next.due)+". Valor em aberto: "+brl(T.remaining)+". Obrigado!":"Olá "+c.name+", tudo bem?",
+ I=l.installments,nxt=I.find(function(i){return!i.paidAt}),long=I.length>4;
+ function row(i){return"<li><div class=\"ri\"><b>"+(l.installments_count===1?"Único":i.n+"/"+l.installments_count)+'</b> <span class="'+(!i.paidAt&&i.due<t?"late":"mu")+'">'+fd(i.due)+'</span> <span class="n">'+brl(i.amount)+"</span>"+(!i.paidAt&&l.late_fee_rate>0&&i.due<t?'<small class="late" style="display:block;margin-left:6px">+ multa de '+brl(r2(i.amount*l.late_fee_rate/100))+"</small>":"")+"</div>"+
+  (i.paidAt?'<button class="ud" data-a="unpay" '+k+' data-i="'+i.n+'">✓ Pago '+fd(i.paidAt)+(i.fee>0?" (+ multa "+brl(i.fee)+")":"")+" ↩</button>":'<button class="pg" data-a="pay" '+k+' data-i="'+i.n+'">Pagar</button>')+"</li>"}
+ var list=long?(nxt?'<div class="note" style="margin-top:12px">Próxima parcela</div><ul class="l" style="margin-top:4px">'+row(nxt)+"</ul>":"")+'<details class="mo ins"><summary>'+(nxt?"Ver as outras parcelas ("+(I.length-1)+")":"Ver as parcelas ("+I.length+")")+'</summary><ul class="l" style="margin-top:0">'+I.filter(function(i){return i!==nxt}).map(row).join("")+"</ul></details>":'<ul class="l">'+I.map(row).join("")+"</ul>",
+ btns=(!done&&l.installments_count===1?'<button class="btn g" data-a="ren" '+k+">↻ Renovar</button>":"")+(!done?'<button class="btn g" data-a="set" '+k+">Quitar "+brl(T.remaining)+"</button>":"")+(!done&&c.phone?'<a class="btn w" target="_blank" rel="noopener" href="'+wa(c.phone,msg)+'">WhatsApp</a>':"");
  return'<div class="card"><div class="row sp"><div style="min-width:0"><b>'+esc(c.name)+'</b><div class="note">Emprestado '+brl(l.principal)+" em "+fd(l.loan_date)+'</div></div><span class="tag '+(done?"pr":late?"lt":"")+'">'+(done?"Quitado":late?"Atrasado":"Em dia")+"</span></div>"+
  '<div class="k3"><div><p>Total</p><b class="n">'+brl(T.total)+'</b></div><div><p>Juros</p><b class="n">'+brl(T.interest)+'</b></div><div><p>Acréscimo</p><b class="n">'+brl(T.surcharge)+"</b></div></div>"+
- '<div style="margin-top:12px"><div class="row sp note"><span>Pago '+brl(T.paid)+"</span><span>"+pct+'%</span></div><div class="bar"><i style="width:'+pct+'%"></i></div></div><ul class="l">'+
- l.installments.map(function(i){return"<li><div><b>"+(l.installments_count===1?"Único":i.n+"/"+l.installments_count)+'</b> <span class="'+(!i.paidAt&&i.due<t?"late":"mu")+'" style="margin-left:6px">'+fd(i.due)+'</span> <span class="n" style="margin-left:6px">'+brl(i.amount)+"</span>"+(!i.paidAt&&l.late_fee_rate>0&&i.due<t?'<small class="late" style="display:block;margin-left:6px">+ multa de '+brl(r2(i.amount*l.late_fee_rate/100))+"</small>":"")+"</div>"+
-  (i.paidAt?'<button class="ud" data-a="unpay" '+k+' data-i="'+i.n+'">✓ Pago '+fd(i.paidAt)+(i.fee>0?" (+ multa "+brl(i.fee)+")":"")+" ↩</button>":'<button class="pg" data-a="pay" '+k+' data-i="'+i.n+'">Pagar</button>')+"</li>"}).join("")+"</ul>"+
+ '<div style="margin-top:12px"><div class="row sp note"><span>Pago '+brl(T.paid)+"</span><span>"+pct+'%</span></div><div class="bar"><i style="width:'+pct+'%"></i></div></div>'+list+
  (l.renewals.length?'<p class="note" style="margin:4px 0 0">Renovações: '+l.renewals.map(function(r){return fd(r.date)+" ("+brl(r.amount)+")"}).join(" · ")+"</p>":"")+(l.history&&l.history.length?'<p class="note" style="margin:4px 0 0">Editado em '+fd(l.history[l.history.length-1].at.slice(0,10))+"</p>":"")+
- '<div class="row" style="margin-top:12px">'+(!done&&l.installments_count===1?'<button class="btn g" data-a="ren" '+k+">↻ Renovar</button>":"")+(!done?'<button class="btn g" data-a="set" '+k+">Quitar "+brl(T.remaining)+"</button>":"")+
- (c.phone?'<a class="btn w" target="_blank" rel="noopener" href="'+wa(c.phone,msg)+'">WhatsApp</a>':"")+'</div><details class="mo"><summary>Mais opções</summary><div class="row" style="margin-top:8px"><button class="btn g" data-a="editln" '+k+'>🔒 Editar empréstimo</button><button class="btn d" data-a="del" '+k+'>Excluir</button></div></details></div>'}
+ (btns?'<div class="row" style="margin-top:12px">'+btns+"</div>":"")+
+ '<details class="mo"><summary>Mais opções</summary><div class="row" style="margin-top:8px"><button class="btn g" data-a="editln" '+k+'>🔒 Editar empréstimo</button><button class="btn d" data-a="del" '+k+'>Excluir</button></div></details></div>'}
 
 function vPainel(){
  var t=today(),R=receipts(),yrs=Array.from(new Set([t.slice(0,4),PY].concat(R.map(function(r){return r.paidAt.slice(0,4)})))).sort().reverse(),
@@ -334,11 +378,11 @@ function vPainel(){
  '<section style="padding-top:16px"><b>Histórico de pagamentos</b> <span class="note">('+vis.length+")</span>"+(vis.length?vis.map(function(r){var c=cn(r.clientId);return'<div class="hi"><div class="row sp"><div style="min-width:0"><b>'+esc(c?c.name:"Cliente")+'</b><div class="note">'+r.label+'</div></div><b class="n" style="font-size:14px">'+brl(r.amount)+'</b></div><div class="row sp" style="margin-top:4px"><div><div class="note">Vencimento: '+fd(r.due)+'</div><button class="ud" style="color:var(--pri);padding:0" data-a="edate" data-r="'+r.id+'">📅 Pago em '+fd(r.paidAt)+'</button></div><span style="font-size:12px;font-weight:500;color:var(--'+(r.late>0?"red":"ok")+')">'+(r.late>0?r.late+(r.late===1?" dia":" dias")+" de atraso":"No prazo")+"</span></div></div>"}).join(""):'<p class="note" style="text-align:center;padding:24px 0">Nenhum recebimento neste período.</p>')+"</section>"}
 
 function openLoanEdit(id){var l=S.loans.find(function(x){return x.id===id});if(!l||document.querySelector(".modal"))return;
- var paid=l.installments.some(function(i){return i.paidAt})||l.renewals.length>0,dis=paid?" disabled":"",c=cn(l.client_id)||{name:"Cliente"},o=document.createElement("div"),opts="",dec=function(v){return String(v==null?0:v).replace(".",",")};
+ var paid=l.installments.some(function(i){return i.paidAt})||l.renewals.length>0,dis=paid?" disabled":"",c=cn(l.client_id)||{name:"Cliente"},o=document.createElement("div"),opts="",money=function(v){return(+v||0).toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})},dec=function(v){return String(v==null?0:v).replace(".",",")};
  for(var n=1;n<=12;n++)opts+='<option value="'+n+'"'+(n===l.installments_count?" selected":"")+">"+(n===1?"1x (único)":n+"x")+"</option>";
  o.className="modal";
  o.innerHTML='<div class="mb"><h4>Editar empréstimo</h4><p style="margin-bottom:10px">'+esc(c.name)+"</p>"+(paid?'<div class="alert" style="margin-bottom:12px">Há pagamentos ou renovações registrados. Valor, juros e parcelas ficam travados. Para alterá-los, desfaça os pagamentos antes. Você pode ajustar as datas das parcelas pendentes.</div>':"")+
- '<div class="grid"><label class="l">Valor (R$)<input id="el1" inputmode="decimal" value="'+dec(l.principal)+'"'+dis+'></label><label class="l">Parcelas<select id="el2"'+dis+">"+opts+'</select></label><label class="l">Tipo de juros<select id="el3"'+dis+'><option value="fixed"'+(l.interest_type==="fixed"?" selected":"")+'>Fixo</option><option value="monthly"'+(l.interest_type==="monthly"?" selected":"")+'>Ao mês</option></select></label><label class="l">Juros (%)<input id="el4" inputmode="decimal" value="'+dec(l.interest_rate)+'"'+dis+'></label><label class="l">Acréscimo (%)<input id="el5" inputmode="decimal" value="'+dec(l.surcharge_rate)+'"'+dis+'></label><label class="l">Multa por atraso (%)<input id="el6" inputmode="decimal" value="'+dec(l.late_fee_rate)+'"></label><label class="l">Emprestado em<input id="el7" type="date" value="'+l.loan_date.slice(0,10)+'"></label>'+(paid?"":'<label class="l">1º vencimento<input id="el8" type="date" value="'+l.first_due.slice(0,10)+'"></label>')+"</div>"+
+ '<div class="grid"><label class="l">Valor (R$)<input id="el1" inputmode="decimal" value="'+money(l.principal)+'"'+dis+'></label><label class="l">Parcelas<select id="el2"'+dis+">"+opts+'</select></label><label class="l">Tipo de juros<select id="el3"'+dis+'><option value="fixed"'+(l.interest_type==="fixed"?" selected":"")+'>Fixo</option><option value="monthly"'+(l.interest_type==="monthly"?" selected":"")+'>Ao mês</option></select></label><label class="l">Juros (%)<input id="el4" inputmode="decimal" value="'+dec(l.interest_rate)+'"'+dis+'></label><label class="l">Acréscimo (%)<input id="el5" inputmode="decimal" value="'+dec(l.surcharge_rate)+'"'+dis+'></label><label class="l">Multa por atraso (%)<input id="el6" inputmode="decimal" value="'+dec(l.late_fee_rate)+'"></label><label class="l">Emprestado em<input id="el7" type="date" value="'+l.loan_date.slice(0,10)+'"></label>'+(paid?"":'<label class="l">1º vencimento<input id="el8" type="date" value="'+l.first_due.slice(0,10)+'"></label>')+"</div>"+
  (paid?'<div class="lb" style="margin:12px 0 4px">Vencimentos pendentes</div>'+l.installments.filter(function(i){return!i.paidAt}).map(function(i){return'<label class="l" style="margin-bottom:8px">Parcela '+i.n+" · "+brl(i.amount)+'<input type="date" data-pd="'+i.n+'" value="'+i.due+'"></label>'}).join(""):"")+
  '<div class="row" style="justify-content:flex-end;margin-top:16px"><button class="btn g" data-m="n">Cancelar</button><button class="btn" data-m="y">Salvar alterações</button></div></div>';
  o.addEventListener("click",function(e){var m=e.target.getAttribute("data-m");if(e.target===o||m==="n"){o.remove();return}
@@ -367,7 +411,7 @@ function cliList(){
  var q=Q.trim().toLowerCase(),rows=S.clients.filter(function(c){return c.name.toLowerCase().indexOf(q)>-1}).sort(function(a,b){return a.name.localeCompare(b.name)}).map(function(c){
   var L=S.loans.filter(function(l){return l.client_id===c.id});return{c:c,n:L.length,lent:L.reduce(function(s,l){return s+l.principal},0),due:L.reduce(function(s,l){return s+tot(l).remaining},0),rn:L.reduce(function(s,l){return s+l.renewals.length},0),open:L.some(function(l){return!settled(l)})}});
  if(!rows.length)return empty(Q?"Nenhum cliente encontrado":"Nenhum cliente ainda",Q?"Tente outro nome.":"Os clientes são cadastrados ao registrar um empréstimo.");
- return rows.map(function(r){return'<div class="card"><div class="row sp"><div style="min-width:0"><b>'+esc(r.c.name)+'</b><div class="note">'+esc(r.c.phone||"Sem telefone")+'</div></div><span class="tag '+(r.n===0?"mu":r.open?"lt":"")+'">'+(r.n===0?"Sem empréstimo":r.open?"Em aberto":"Quitado")+"</span></div>"+
+ return rows.map(function(r){return'<div class="card"><div class="row sp"><div style="min-width:0"><b>'+esc(r.c.name)+'</b><div class="note">'+esc(r.c.phone?fmtPhone(r.c.phone):"Sem telefone")+'</div></div><span class="tag '+(r.n===0?"mu":r.open?"lt":"")+'">'+(r.n===0?"Sem empréstimo":r.open?"Em aberto":"Quitado")+"</span></div>"+
   '<div class="grid" style="gap:4px 12px;margin-top:12px;font-size:14px"><span class="mu">Total emprestado</span><span class="n" style="text-align:right">'+brl(r.lent)+'</span><span class="mu">Empréstimos</span><span style="text-align:right">'+r.n+'</span><span class="mu">Renovou</span><span style="text-align:right">'+(r.rn?"Sim ("+r.rn+"x)":"Não")+'</span><span class="mu">A receber</span><b class="n" style="text-align:right">'+brl(r.due)+'</b></div><div class="row" style="margin-top:10px"><button class="btn g" data-a="editcli" data-c="'+r.c.id+'">Editar cliente</button></div></div>'}).join("")}
 function vClientes(){
  var od=!D.ok&&(!S.last||Date.now()-Date.parse(S.last)>7*864e5);
@@ -428,11 +472,23 @@ function waitLeft(){var f=pfail();return f.until&&f.until>Date.now()?Math.ceil((
 function pbad(){var f=pfail(),n=(f.n||0)+1,o={n:n};if(n>=5)o.until=Date.now()+Math.min(30*Math.pow(2,n-5),900)*1000;try{localStorage.setItem(PF,JSON.stringify(o))}catch(e){}}
 function pgood(){try{localStorage.removeItem(PF)}catch(e){}}
 function pinChecker(){return async function(p){var w=waitLeft();if(w)return"Muitas tentativas. Aguarde "+w+" s.";if(await pinOk(p)){pgood();return true}pbad();var w2=waitLeft();return w2?"PIN incorreto. Aguarde "+w2+" s.":"PIN incorreto"}}
+var BK="meus-emprestimos:bio",BIOAV=null;
+function bioId(){try{return localStorage.getItem(BK)||""}catch(e){return""}}
+function bioOn(){return!!bioId()&&!!navigator.credentials}
+async function bioAvail(){try{return!!(navigator.credentials&&window.PublicKeyCredential&&PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable&&await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable())}catch(e){return false}}
+function rnd(n){return crypto.getRandomValues(new Uint8Array(n))}
+async function bioCreate(){
+ var c=await navigator.credentials.create({publicKey:{challenge:rnd(32),rp:{name:"Meus Empréstimos",id:location.hostname},user:{id:rnd(16),name:"meus-emprestimos",displayName:S.user||"Usuário"},pubKeyCredParams:[{type:"public-key",alg:-7},{type:"public-key",alg:-257}],authenticatorSelection:{authenticatorAttachment:"platform",userVerification:"required",residentKey:"preferred"},timeout:60000,attestation:"none"}});
+ return c&&c.rawId?b64(c.rawId):""}
+async function bioAuth(){
+ try{var id=bioId();if(!id)return false;
+  var r=await navigator.credentials.get({publicKey:{challenge:rnd(32),rpId:location.hostname,allowCredentials:[{type:"public-key",id:unb64(id),transports:["internal"]}],userVerification:"required",timeout:60000}});
+  return!!r}catch(e){return false}}
 function pinPad(o){return new Promise(function(done){
  var el=document.createElement("div"),v="",busy=false,keys="";el.className="lock";el.setAttribute("role","dialog");el.setAttribute("aria-modal","true");
  [1,2,3,4,5,6,7,8,9].forEach(function(k){keys+='<button data-k="'+k+'" aria-label="'+k+'">'+k+"</button>"});
  keys+='<button class="z" tabindex="-1" aria-hidden="true"></button><button data-k="0" aria-label="0">0</button><button data-k="b" aria-label="Apagar">⌫</button>';
- el.innerHTML="<h3>"+esc(o.title)+"</h3><p>"+esc(o.sub||"")+'</p><div class="dots"><i></i><i></i><i></i><i></i></div><div class="kp">'+keys+"</div>"+(o.cancel?'<button class="lk" data-x="c">Cancelar</button>':"")+(o.forgot?'<button class="lk" data-x="f">Esqueci o PIN</button>':"");
+ el.innerHTML="<h3>"+esc(o.title)+"</h3><p>"+esc(o.sub||"")+'</p><div class="dots"><i></i><i></i><i></i><i></i></div><div class="kp">'+keys+"</div>"+(o.bio&&bioOn()?'<button class="lk" data-x="b">Usar Face ID / biometria</button>':"")+(o.cancel?'<button class="lk" data-x="c">Cancelar</button>':"")+(o.forgot?'<button class="lk" data-x="f">Esqueci o PIN</button>':"");
  function draw(){el.querySelectorAll(".dots i").forEach(function(i,k){i.classList.toggle("on",k<v.length)})}
  function close(r){document.removeEventListener("keydown",kd,true);el.remove();done(r)}
  async function submit(){busy=true;var r=o.check?await o.check(v):true;busy=false;
@@ -440,16 +496,17 @@ function pinPad(o){return new Promise(function(done){
   v="";draw();var d=el.querySelector(".dots");d.classList.remove("err");void d.offsetWidth;d.classList.add("err");el.querySelector("p").textContent=typeof r==="string"?r:"PIN incorreto"}
  function press(k){if(busy)return;if(k==="b")v=v.slice(0,-1);else if(v.length<4)v+=k;draw();if(v.length===4)submit()}
  function kd(e){var ps=document.querySelectorAll(".lock");if(ps[ps.length-1]!==el)return;if(/^\d$/.test(e.key)){e.preventDefault();press(e.key)}else if(e.key==="Backspace"){e.preventDefault();press("b")}else if(e.key==="Escape"&&o.cancel){e.preventDefault();close(null)}}
- el.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;if(b.dataset.k)press(b.dataset.k);else if(b.dataset.x==="c")close(null);else if(b.dataset.x==="f"&&o.forgot)Promise.resolve(o.forgot()).then(function(r){if(r===true)close("recovered")})});
- document.addEventListener("keydown",kd,true);document.body.appendChild(el)})}
+ el.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;if(b.dataset.k)press(b.dataset.k);else if(b.dataset.x==="b"&&o.bio){bioAuth().then(function(ok){if(ok){pgood();close("bio")}else el.querySelector("p").textContent="Não foi possível usar a biometria. Digite o PIN."})}else if(b.dataset.x==="c")close(null);else if(b.dataset.x==="f"&&o.forgot)Promise.resolve(o.forgot()).then(function(r){if(r===true)close("recovered")})});
+ document.addEventListener("keydown",kd,true);document.body.appendChild(el);
+ if(o.bioAuto&&bioOn())setTimeout(function(){if(document.body.contains(el))bioAuth().then(function(ok){if(ok&&document.body.contains(el)){pgood();close("bio")}})},350)})}
 async function lockNow(){if(LOCKED||!hasPin()||!CR)return;LOCKED=true;document.body.classList.add("locked");document.querySelectorAll(".modal").forEach(function(m){m.remove()});
- await pinPad({title:"Meus Empréstimos",sub:"Digite seu PIN de 4 dígitos",forgot:forgotPin,check:pinChecker()});
+ await pinPad({title:"Meus Empréstimos",sub:"Digite seu PIN de 4 dígitos",forgot:forgotPin,bio:true,bioAuto:true,check:pinChecker()});
  LOCKED=false;document.body.classList.remove("locked")}
 async function pinCreate(){
  var p1=await pinPad({title:"Criar PIN",sub:"Escolha 4 dígitos",cancel:true});if(!p1)return false;
  var p2=await pinPad({title:"Confirme o PIN",sub:"Digite os mesmos 4 dígitos",cancel:true,check:async function(p){return p===p1?true:"Não confere. Digite de novo"}});if(!p2)return false;
  await pinSave(p1);pgood();toast(canRecover()?"PIN ativado":(G.cid&&location.protocol==="https:"?"PIN ativado. Conecte o Google Drive para poder recuperá-lo pela sua conta Google.":"PIN ativado"));return true}
-async function pinVerify(title){if(!hasPin())return true;return!!(await pinPad({title:title||"Digite seu PIN",sub:"Confirme com seu PIN de 4 dígitos",cancel:true,check:pinChecker()}))}
+async function pinVerify(title,nobio){if(!hasPin())return true;return!!(await pinPad({title:title||"Digite seu PIN",sub:"Confirme com seu PIN de 4 dígitos",cancel:true,bio:!nobio,bioAuto:!nobio,check:pinChecker()}))}
 async function guardPin(fn){if(!hasPin()){fn();return}if(await pinVerify("Confirme com o PIN"))fn()}
 async function needPin(fn){
  if(!CR){toast("PIN indisponível neste navegador. Abra o site em https.");return}
@@ -632,10 +689,13 @@ document.addEventListener("dragleave",function(e){var d=dz(e);if(d)d.classList.r
 document.addEventListener("drop",function(e){var d=dz(e);if(d){e.preventDefault();d.classList.remove("on");importFile(e.dataTransfer.files[0])}});
 document.addEventListener("keydown",function(e){if(e.key==="Enter"&&e.target.id==="un"){var b=document.querySelector('[data-a="setname"]');if(b)b.click()}});
 document.addEventListener("keydown",function(e){if(e.key==="Escape"){var m=document.querySelector(".modal");if(m)m.remove()}});
-new MutationObserver(function(ms){ms.forEach(function(m){m.addedNodes.forEach(function(n){if(n.classList&&n.classList.contains("modal")){n.setAttribute("role","dialog");n.setAttribute("aria-modal","true");var f=n.querySelector("input,button");if(f&&!n.contains(document.activeElement))f.focus()}})})}).observe(document.body,{childList:true});
-function isFld(el){return el&&/^(INPUT|SELECT|TEXTAREA)$/.test(el.tagName)}
-document.addEventListener("focusin",function(e){if(isFld(e.target)&&!e.target.closest(".modal"))document.body.classList.add("nonav")});
-document.addEventListener("focusout",function(){setTimeout(function(){if(!isFld(document.activeElement))document.body.classList.remove("nonav")},60)});
+new MutationObserver(function(ms){ms.forEach(function(m){m.addedNodes.forEach(function(n){if(n.classList&&n.classList.contains("modal")){n.setAttribute("role","dialog");n.setAttribute("aria-modal","true");var f=n.querySelector("input,select");n.setAttribute("tabindex","-1");if(!n.contains(document.activeElement)){if(f&&!(window.matchMedia&&matchMedia("(pointer:coarse)").matches))f.focus();else n.focus()}}})})}).observe(document.body,{childList:true});
+function isFld(el){return!!el&&/^(INPUT|TEXTAREA)$/.test(el.tagName)&&!/^(checkbox|radio|date|button|submit|range|file)$/.test(el.type||"")}
+function kbOpen(){var vv=window.visualViewport;return vv?window.innerHeight-vv.height>120:false}
+function navCheck(){document.body.classList.toggle("nonav",isFld(document.activeElement)&&kbOpen()&&!document.activeElement.closest(".modal"))}
+document.addEventListener("focusin",function(){setTimeout(navCheck,350)});
+document.addEventListener("focusout",function(){setTimeout(navCheck,60)});
+if(window.visualViewport)visualViewport.addEventListener("resize",navCheck);
 function syncOther(){
  if(!S.loaded||S.status==="saving")return;
  try{var raw=localStorage.getItem(LK);if(!raw)return;var x=JSON.parse(raw);
@@ -644,6 +704,7 @@ document.addEventListener("visibilitychange",function(){if(document.visibilitySt
 window.addEventListener("focus",syncOther);
 window.addEventListener("storage",function(e){if(e.key===LK)syncOther()});
 window.addEventListener("pagehide",function(){if(S.loaded&&S.status!=="saved")persist(snap())});
+bioAvail().then(function(v){BIOAV=v});
 if("serviceWorker"in navigator&&location.protocol==="https:")window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})});
 if(hasPin()&&CR){document.body.classList.add("locked");lockNow()}
 applyTheme(getTheme());try{if(G.cid&&location.protocol==="https:")gLoad().catch(function(){})}catch(e){}render();load();driveInit();setInterval(setDt,30000);
