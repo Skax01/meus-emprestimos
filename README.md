@@ -46,5 +46,3 @@ O Google só aceita login em endereços `https`. Faça depois que o site estiver
    - escreva uma vez no `index.html`, na linha `var GCID="",GK="meus-emprestimos:google";`, colocando o ID entre as **primeiras** aspas e sem mexer no resto da linha, e publique de novo (vale para todos os aparelhos).
 6. Toque em **Conectar ao Google Drive**. O sistema cria a pasta `save Meus Emprestimos` e grava o backup a cada alteração.
 
-O ID do cliente **não é segredo**, pode ficar no código.
-
