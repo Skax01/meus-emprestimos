@@ -183,12 +183,13 @@ function num(s){s=String(s||"").replace(/[^\d.,-]/g,"");if(!s)return 0;var v,c=s
 function wa(ph,tx){var d=(ph||"").replace(/\D/g,"");if(d&&d.length<=11)d="55"+d;return"https://wa.me/"+d+"?text="+encodeURIComponent(tx)}
 
 /* ===== regras (iguais ao sistema da Lovable) ===== */
-function calc(o){var n=Math.max(1,Math.min(12,Math.floor(o.count||1))),rt=(o.rate||0)/100*(o.type==="monthly"?n:1),sc=n>=2?(o.sur||0)/100:0,
- interest=r2(o.principal*rt),surcharge=r2(o.principal*sc),total=r2(o.principal+interest+surcharge),per=Math.floor(total/n*100)/100,am=[];
+function calc(o){var n=Math.max(1,Math.min(12,Math.floor(o.count||1))),rt=(o.rate||0)/100*(o.type==="monthly"?n:1),
+ interest=r2(o.principal*rt),surcharge=n>=2?r2(o.surv!=null?o.surv:o.principal*(o.sur||0)/100):0,total=r2(o.principal+interest+surcharge),per=Math.floor(total/n*100)/100,am=[];
  for(var i=0;i<n;i++)am.push(i===n-1?r2(total-per*(n-1)):per);return{n:n,interest:interest,surcharge:surcharge,total:total,per:per,amounts:am}}
+function surOf(l){return l.surcharge_amount!=null?l.surcharge_amount:r2((l.principal||0)*(l.surcharge_rate||0)/100)}
 function build(am,first){return am.map(function(a,i){return{n:i+1,due:addM(first,i),amount:a,paidAt:null}})}
 function sumA(a){return r2(a.reduce(function(s,x){return s+x.amount},0))}
-function tot(l){var c=calc({principal:l.principal,rate:l.interest_rate,type:l.interest_type,sur:l.surcharge_rate,count:l.installments_count}),t=sumA(l.installments),p=sumA(l.installments.filter(function(i){return i.paidAt}));
+function tot(l){var c=calc({principal:l.principal,rate:l.interest_rate,type:l.interest_type,sur:l.surcharge_rate,surv:l.surcharge_amount,count:l.installments_count}),t=sumA(l.installments),p=sumA(l.installments.filter(function(i){return i.paidAt}));
  return{interest:c.interest,surcharge:c.surcharge,total:t,paid:p,remaining:r2(t-p),next:l.installments.find(function(i){return!i.paidAt})||null}}
 function settled(l){return l.installments.every(function(i){return i.paidAt})}
 function overdue(l){var t=today();return l.installments.some(function(i){return!i.paidAt&&i.due<t})}
@@ -308,15 +309,15 @@ function vNovo(){F1M=false;var t=today(),o="";for(var n=1;n<=12;n++)o+='<option 
  '<label class="l">Tipo de juros<select id="fm"><option value="fixed">Fixo</option><option value="monthly">Ao mês</option></select></label>'+
  '<div class="hint full">Fixo: juros uma única vez sobre o valor. Ao mês: juros × número de parcelas.</div>'+
  '<label class="l">Juros (%)<input id="fr" inputmode="decimal" value="15"></label>'+
- '<label class="l">Acréscimo (%)<input id="fa" inputmode="decimal" disabled></label>'+
+ '<label class="l">Acréscimo (R$)<input id="fa" inputmode="decimal" placeholder="0,00" disabled></label>'+
  '<label class="l">Emprestado em<input id="fz" type="date" value="'+t+'"></label>'+
  '<label class="l">1º vencimento<input id="f1" type="date" value="'+addM(t,1)+'"></label>'+(S.opts&&S.opts.fee?'<label class="l full">Multa por atraso (%)<input id="fl" inputmode="decimal" placeholder="Opcional. Ex.: 2"></label>':"")+'</div></div>'+
  '<div class="hero" style="margin-bottom:16px"><small style="text-transform:uppercase;letter-spacing:.08em;font-weight:500">Total a receber</small><b id="pt"></b><span id="ps"></span></div>'+
  '<button class="btn big" data-a="add">Registrar empréstimo</button></div>'}
-function rf(){return{principal:num($("fv").value),rate:num($("fr").value),type:$("fm").value,sur:num($("fa").value),count:+$("fx").value||1}}
+function rf(){return{principal:num($("fv").value),rate:num($("fr").value),type:$("fm").value,surv:num($("fa").value),count:+$("fx").value||1}}
 function prev(){
  var a=$("fa"),n=+$("fx").value||1;
- if(n<2){a.disabled=true;a.value="";a.placeholder="Só a partir de 2x"}else if(a.disabled){a.disabled=false;a.value="0";a.placeholder="0"}
+ if(n<2){a.disabled=true;a.value="";a.placeholder="Só a partir de 2x"}else if(a.disabled){a.disabled=false;a.value="";a.placeholder="0,00"}
  var f0=rf(),c=calc(f0),last=c.amounts[c.n-1];
  $("fvh").textContent=f0.principal>0?"Valor entendido: "+brl(f0.principal):"";
  $("pt").textContent=brl(c.total);
@@ -382,7 +383,7 @@ function openLoanEdit(id){var l=S.loans.find(function(x){return x.id===id});if(!
  for(var n=1;n<=12;n++)opts+='<option value="'+n+'"'+(n===l.installments_count?" selected":"")+">"+(n===1?"1x (único)":n+"x")+"</option>";
  o.className="modal";
  o.innerHTML='<div class="mb"><h4>Editar empréstimo</h4><p style="margin-bottom:10px">'+esc(c.name)+"</p>"+(paid?'<div class="alert" style="margin-bottom:12px">Há pagamentos ou renovações registrados. Valor, juros e parcelas ficam travados. Para alterá-los, desfaça os pagamentos antes. Você pode ajustar as datas das parcelas pendentes.</div>':"")+
- '<div class="grid"><label class="l">Valor (R$)<input id="el1" inputmode="decimal" value="'+money(l.principal)+'"'+dis+'></label><label class="l">Parcelas<select id="el2"'+dis+">"+opts+'</select></label><label class="l">Tipo de juros<select id="el3"'+dis+'><option value="fixed"'+(l.interest_type==="fixed"?" selected":"")+'>Fixo</option><option value="monthly"'+(l.interest_type==="monthly"?" selected":"")+'>Ao mês</option></select></label><label class="l">Juros (%)<input id="el4" inputmode="decimal" value="'+dec(l.interest_rate)+'"'+dis+'></label><label class="l">Acréscimo (%)<input id="el5" inputmode="decimal" value="'+dec(l.surcharge_rate)+'"'+dis+'></label><label class="l">Multa por atraso (%)<input id="el6" inputmode="decimal" value="'+dec(l.late_fee_rate)+'"></label><label class="l">Emprestado em<input id="el7" type="date" value="'+l.loan_date.slice(0,10)+'"></label>'+(paid?"":'<label class="l">1º vencimento<input id="el8" type="date" value="'+l.first_due.slice(0,10)+'"></label>')+"</div>"+
+ '<div class="grid"><label class="l">Valor (R$)<input id="el1" inputmode="decimal" value="'+money(l.principal)+'"'+dis+'></label><label class="l">Parcelas<select id="el2"'+dis+">"+opts+'</select></label><label class="l">Tipo de juros<select id="el3"'+dis+'><option value="fixed"'+(l.interest_type==="fixed"?" selected":"")+'>Fixo</option><option value="monthly"'+(l.interest_type==="monthly"?" selected":"")+'>Ao mês</option></select></label><label class="l">Juros (%)<input id="el4" inputmode="decimal" value="'+dec(l.interest_rate)+'"'+dis+'></label><label class="l">Acréscimo (R$)<input id="el5" inputmode="decimal" value="'+money(surOf(l))+'"'+dis+'></label><label class="l">Multa por atraso (%)<input id="el6" inputmode="decimal" value="'+dec(l.late_fee_rate)+'"></label><label class="l">Emprestado em<input id="el7" type="date" value="'+l.loan_date.slice(0,10)+'"></label>'+(paid?"":'<label class="l">1º vencimento<input id="el8" type="date" value="'+l.first_due.slice(0,10)+'"></label>')+"</div>"+
  (paid?'<div class="lb" style="margin:12px 0 4px">Vencimentos pendentes</div>'+l.installments.filter(function(i){return!i.paidAt}).map(function(i){return'<label class="l" style="margin-bottom:8px">Parcela '+i.n+" · "+brl(i.amount)+'<input type="date" data-pd="'+i.n+'" value="'+i.due+'"></label>'}).join(""):"")+
  '<div class="row" style="justify-content:flex-end;margin-top:16px"><button class="btn g" data-m="n">Cancelar</button><button class="btn" data-m="y">Salvar alterações</button></div></div>';
  o.addEventListener("click",function(e){var m=e.target.getAttribute("data-m");if(e.target===o||m==="n"){o.remove();return}
@@ -393,8 +394,8 @@ function openLoanEdit(id){var l=S.loans.find(function(x){return x.id===id});if(!
    nl=Object.assign({},cur,{loan_date:ld,late_fee_rate:lfe,installments:cur.installments.map(function(i){return map[i.n]?Object.assign({},i,{due:map[i.n]}):i})})}
   else{var pr=num($("el1").value),rt=num($("el4").value),sc=num($("el5").value),cnt=+$("el2").value||1,fdu=$("el8").value;
    if(pr<=0||rt<0||sc<0||!fdu){toast("Confira valor, juros e datas");return}if(fdu<ld){toast("O 1º vencimento não pode ser antes da data do empréstimo");return}
-   var cc=calc({principal:pr,rate:rt,type:$("el3").value,sur:sc,count:cnt});
-   nl=Object.assign({},cur,{principal:pr,interest_rate:rt,interest_type:$("el3").value,surcharge_rate:cc.n>=2?sc:0,installments_count:cc.n,loan_date:ld,first_due:fdu,late_fee_rate:lfe,installments:build(cc.amounts,fdu)})}
+   var cc=calc({principal:pr,rate:rt,type:$("el3").value,surv:sc,count:cnt});
+   nl=Object.assign({},cur,{principal:pr,interest_rate:rt,interest_type:$("el3").value,surcharge_amount:cc.n>=2?sc:0,surcharge_rate:cc.n>=2&&pr>0?Math.round(sc/pr*1e6)/1e4:0,installments_count:cc.n,loan_date:ld,first_due:fdu,late_fee_rate:lfe,installments:build(cc.amounts,fdu)})}
   nl.history=(cur.history||[]).concat([{at:new Date().toISOString(),note:"Editado"}]).slice(-20);
   o.remove();saveLoan(nl);toast("Empréstimo atualizado")});
  document.body.appendChild(o)}
@@ -612,7 +613,7 @@ function validBackup(d){
  var i,k;
  for(i=0;i<d.clients.length;i++){var c=d.clients[i];if(!c||!IDR.test(c.id)||typeof c.name!=="string"||!c.name.trim()||c.name.length>200||(c.phone!=null&&typeof c.phone!=="string"))return false}
  for(i=0;i<d.loans.length;i++){var l=d.loans[i];
-  if(!l||!IDR.test(l.id)||!IDR.test(l.client_id)||!okN(l.principal)||!(l.principal>0)||!okN(l.interest_rate)||(l.surcharge_rate!=null&&!okN(l.surcharge_rate))||(l.late_fee_rate!=null&&!okN(l.late_fee_rate))||(l.interest_type!=="fixed"&&l.interest_type!=="monthly")||!Number.isInteger(l.installments_count)||l.installments_count<1||l.installments_count>12||typeof l.loan_date!=="string"||!DTR.test(l.loan_date.slice(0,10))||typeof l.first_due!=="string"||!DTR.test(l.first_due.slice(0,10))||!Array.isArray(l.installments)||!l.installments.length||l.installments.length>12)return false;
+  if(!l||!IDR.test(l.id)||!IDR.test(l.client_id)||!okN(l.principal)||!(l.principal>0)||!okN(l.interest_rate)||(l.surcharge_rate!=null&&!okN(l.surcharge_rate))||(l.surcharge_amount!=null&&(!okN(l.surcharge_amount)||l.surcharge_amount<0))||(l.late_fee_rate!=null&&!okN(l.late_fee_rate))||(l.interest_type!=="fixed"&&l.interest_type!=="monthly")||!Number.isInteger(l.installments_count)||l.installments_count<1||l.installments_count>12||typeof l.loan_date!=="string"||!DTR.test(l.loan_date.slice(0,10))||typeof l.first_due!=="string"||!DTR.test(l.first_due.slice(0,10))||!Array.isArray(l.installments)||!l.installments.length||l.installments.length>12)return false;
   for(k=0;k<l.installments.length;k++){var x=l.installments[k];if(!x||!Number.isInteger(x.n)||!okN(x.amount)||(x.fee!=null&&!okN(x.fee))||typeof x.due!=="string"||!DTR.test(x.due)||!(x.paidAt==null||(typeof x.paidAt==="string"&&DTR.test(x.paidAt.slice(0,10)))))return false}
   if(l.renewals!=null){if(!Array.isArray(l.renewals))return false;for(k=0;k<l.renewals.length;k++){var r=l.renewals[k];if(!r||!okN(r.amount)||typeof r.date!=="string"||!DTR.test(r.date.slice(0,10)))return false}}}
  return true}
@@ -637,12 +638,12 @@ document.addEventListener("click",function(e){
   if(!name){toast("Informe o nome do cliente");return}
   if(f.principal<=0){toast("Informe o valor emprestado");return}
   if(!fz||!f1){toast("Informe o 1º vencimento");return}
-  if(f.rate<0||f.sur<0){toast("Juros e acréscimo não podem ser negativos");return}
+  if(f.rate<0||f.surv<0){toast("Juros e acréscimo não podem ser negativos");return}
   if(f1<fz){toast("O 1º vencimento não pode ser antes da data do empréstimo");return}
   var lf=$("fl")?num($("fl").value):0;if(lf<0||lf>100){toast("Multa inválida");return}
   var cl=S.clients.find(function(x){return x.name.trim().toLowerCase()===name.toLowerCase()}),nc=null;
   if(!cl)nc={id:uid(),name:name,phone:ph};else if(ph&&ph!==cl.phone)nc=Object.assign({},cl,{phone:ph});
-  tab="ativos";saveLoan({id:uid(),client_id:nc?nc.id:cl.id,principal:f.principal,interest_rate:f.rate,interest_type:f.type,surcharge_rate:c.n>=2?f.sur:0,late_fee_rate:lf,installments_count:c.n,loan_date:fz,first_due:f1,installments:build(c.amounts,f1),renewals:[]},nc);
+  tab="ativos";saveLoan({id:uid(),client_id:nc?nc.id:cl.id,principal:f.principal,interest_rate:f.rate,interest_type:f.type,surcharge_amount:c.n>=2?f.surv:0,surcharge_rate:c.n>=2&&f.principal>0?Math.round(f.surv/f.principal*1e6)/1e4:0,late_fee_rate:lf,installments_count:c.n,loan_date:fz,first_due:f1,installments:build(c.amounts,f1),renewals:[]},nc);
   toast("Empréstimo de "+brl(f.principal)+" para "+(nc?nc.name:cl.name)+" registrado")}
  else if(a==="pay"&&L)doPay(L,n);
  else if(a==="unpay"&&L)ask("Desfazer pagamento?","A parcela "+n+" voltará a ficar pendente.","Desfazer",function(){saveLoan(mapI(L,function(i){return i.n===n?Object.assign({},i,{paidAt:null,fee:0}):i}));toast("Pagamento desfeito")});
